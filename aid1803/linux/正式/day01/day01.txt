@@ -1,0 +1,133 @@
+day01
+自我介绍：
+    魏明泽
+    Email:weimz@tedu.cn
+    QQ: 88126169
+    项目经理加入方法：
+    AID1803 + 姓名（所在地）
+    我是AID1803魏明泽（北京）
+
+三大操作系统：
+    UNIX:
+        AIX(IBM)
+        Solaris(Sun/Oracle)
+        MAC OS X(Apple)
+        IOS(Apple)
+    Linux（当前教学）:
+        Ubuntu:
+            用户名:tarena
+            密码：tarena
+        Redhat
+        CentOS
+        Android(安卓)
+        www.kernel.org
+    Windows:
+        win10,win7,winxp,win98,win95,win3.2
+
+    
+                        application 应用软件
+                        ————————————————————————
+                        Library系统库
+                        ————————————————————————
+                        Operator System (OS)操作系统
+                        ——————————————————————————————
+                        硬件：CPU 
+                            　DISK 
+                            　BUS　
+                             RAM　
+
+软件： 
+    操作系统软件　内核模式　使应用软件合理的使用资源
+    标准库软件
+    应用软件　　　　用户模式
+
+
+
+vmware
+    开启BIOS里的虚拟机支持功能
+    Virtual Tech [Disable/Enable]
+打开终端：   
+    １．点击图标
+    ２．搜索命令gnome-terminal 或“终端”
+退出：
+    $ exit
+
+Linux 命令的格式：
+    命令名[选项][参数]
+
+例如：
+    $ pwd
+
+说明：
+    有些命令没有选项和参数
+
+目录树和根：
+    根：
+        Linux : /
+        Window: C: or D: ...
+    例：
+        /usr/bin/python3(Linux下的文件)
+        C:\Windows\System32\cal.exe(Windows下的文件)
+
+路径：
+    路径是用来记录一个文件或文件夹的字符串
+
+路径分为两种：
+    绝对路径　和　相对路径
+
+    绝对路径：
+        以'/'字符开头的路径为绝对路径
+        绝对路径通常能标识一个唯一的文件或文件夹
+
+    相对路径：
+        不以'/'开头的路径为相对路径
+        开始符号：
+            １．以文件名/文件夹开头
+            .开头当前文件夹
+            ..开头（上一级文件夹—）
+            ~用户主目录
+    实例：
+        cd /usr/bin #进入/usr/bin 目录
+        ls -l ./python3 查看当前python3文件的信息
+        cd ..
+        ls -l
+        ls -l
+
+    pwd命令：
+        作用：
+            用于显示当前操作的路径位置（当前工作路径）
+
+    cd 命令：
+        作用：
+            改变当前的工作路径（进入某个目录）
+        格式：
+            cd[目录名]
+        示例：
+            cd /home/tarena
+            cd / #进入根目录
+            cd   #默认进入用户主目录
+            cd .. 进入上一层目录
+            cd -  #进入到进入此目录前的文件夹
+
+    ls命令：
+        作用：
+            用来显示文件或文件夹的信息
+        格式：
+            ls[选项][文件夹/文件名],当为文件名时，可以查找目录下是否存在此文件
+        常用选项：
+            -l 列表显示文件的详细信息
+            -a 显示全部文件/文件夹信息
+
+    mkdir && rmdir
+
+    tree命令：
+        作用：
+            显示目录树
+        安装方法：
+            $ sudo apt install tree <回车>
+            输入密码：tarena
+        示例：
+            $tree #等同于 $tree .
+            $tree /home/tarena/aid1803
+
+
