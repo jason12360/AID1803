@@ -1,1 +1,0 @@
-print('mypack/game/__init.py被导入')

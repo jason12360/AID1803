@@ -1,3 +1,0 @@
-name:kajdk,age:23,score:213
-name:kjsd,age:123,score:213
-name:kajsd,age:123,score:123

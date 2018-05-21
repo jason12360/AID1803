@@ -1,2 +1,0 @@
-/etc/group
-/etc/iproute2/group
