@@ -1,0 +1,106 @@
+前情回顾
+
+缓冲区
+粘包 tcp
+udp通信 recvfrom sendto
+广播
+http协议
+
+
+文件传输
+********************************************************
+
+tcp应用 http服务器
+1.功能：
+    1.接收http请求
+    2.给出一定的响应
+
+IO input output
+    在内存中存在数据交换的操作
+    内存和磁盘交换 文件读写 打印
+    内存和网络交换 recv send 
+
+IO密集型
+    程序当中执行了大量的IO操作，而较少需要CPU运算，消耗cpu资源少，运行周期往往较长
+
+cpu密集型程序
+    程序执行需要大量的CPU运算，IO操作较少，占用CPU多
+
+IO的分类
+
+阻塞IO：默认形态 是效率最低的一种IO
+阻塞形态：
+    1.因为等待某种条件的达成再继续运行
+        例如 accept recv input
+    2.处理IO事件时候耗时较长也会产生阻塞
+        例如 文件的读写过程 网络数据的传输过程
+
+非阻塞IO：
+    1.通过修改IO对象使其变为非阻塞状态，只作用于第一种阻塞形态
+
+    2.通常用循环不断判断阻塞条件，需要消耗更多cpu但是一定程度上提高了IO效率
+    3.s.setbloking()
+        功能：将套接字设置为阻塞状态
+        参数：bool默认为True，设置为False为非阻塞
+    4.超时等待（检测）：
+        所谓超时检测即对原本阻塞的函数进行设置，使其不再始终阻塞，
+        而是阻塞等待一定时间后自动返回，在规定时间中如果正常结束阻塞则继续执行，
+        否则产生timeout异常
+    5.s.settimeout()
+        功能：设置套接字的超时检测
+        参数：超时时间
+    cookie：
+        更专业的打印异常信息
+        import traceback 
+        traceback.print_exc()       
+IO多路复用
+    1.定义：同时监控多个IO事件，当哪个IO事件准备就绪就执行哪个IO事件，形成并发的效果
+    *并发和并行
+
+    2.import select 模块
+
+    3.*select ----> win linux unix 跨平台性好
+       poll -----> linux,unix
+       epoll-----> linux,unix
+
+    4.r,w,x = select(rlist,wlist,xlist[,timeout])
+    	功能：
+    		监控IO事件，阻塞等待IO事件发生
+    	参数：
+    		rlist      列表   存放我们要监控等待处理的IO
+    		wlist      列表   存放我们希望主动处理的IO
+    		xlist      列表   存放如果发生异常需要我们处理的
+    		timeout    数字   超时检测 默认是一直阻塞
+    	返回值： 
+    		r          列表   rlist当中准备就绪的IO
+    		w          列表   wlist当中准备就绪的IO
+    		x          列表   xlist当中准备就绪的IO
+    5.注意点：
+    	1.在处理io过程中不应该发生死循环（某个io单独占有服务器）
+    	2.io多路复用是单进程程序，是一个并发程序
+    	3.io多路复用有较高的io执行效率
+    
+    6.select.poll()
+    	1.创建poll对象
+    		p = select.poll()
+    	2.加入关注函数
+    		p.register(句柄)
+    		p.register(s)
+    	3.使用poll函数进行监控
+    		events = p.poll()
+    		返回值：[(fileno,event),...]
+
+    	4.poll io事件
+    		POLLIN        rlist
+    		POLLOUT       wlist 
+    		POLLUP        断开连接
+    		POLLERR       xlist
+    		POLLPRI       紧急处理
+    		POLLVAL       无效数据
+
+    7.epoll 
+    	1.效率上比poll和select稍微高
+    	2.只能用于linux，unix
+    	3.支持边缘触发，select和poll只支持水平触发
+事件驱动IO
+异步IO

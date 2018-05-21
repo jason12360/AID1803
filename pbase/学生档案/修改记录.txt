@@ -1,0 +1,37 @@
+# 2. 改写之前的学生信息管理项目源码，要求带有操作界面：
+#     +------------------------------+
+#     | 1)添加学生信息                 |
+#     | 2)显示所有学生的信息            |
+#     | 3)删除学生信息                 |
+#     | 4)修改学生成绩                 |
+#     | 5)按学生成绩高-低显示学生信息    |
+#     | 6)按学生成绩低-高显示学生信息    |
+#     | 7)按学生年龄高-低显示学生信息    |
+#     | 8)按学生年龄低-高显示学生信息    |
+#     | q)退出                        |
+#     +------------------------------+
+#     请选择：
+#     要求每个功能至少写一个函数与之相对应
+
+2018.5.2 
+    1.将原有的项目重新归档在aid1803/pbase/学生档案 目录下
+    2. 重新修改代码完成以下功能：
+        1.读取用户在configuration.jc中所配置的信息：
+            view: student_view
+            students_controller:students_controller
+            model:studnet
+            database:student_info.jdb
+
+
+        2.创建StudentView类，在实例中，可以根据configuration.jc中用户自定义的地址使用用户户在.jtml文件中自定义显示内容
+
+        3.创建StudentInterface类，在此中定义run()方法
+2018.5.12
+	1.修改原有的configuration类，加入get_class,动态调用模块返回对应的类。
+		
+	2.get_database,返回以‘.jdb'结尾的database'文件路径
+	
+	3.改写student_view类，将所有绘图方法全部加入此类
+		根据student类的属性生成对应的图像和IO
+    4.改写student_controller类，下次完成保存读取方法
+   

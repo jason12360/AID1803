@@ -1,0 +1,195 @@
+day 20笔记
+属性管理函数：
+        函数                                      说明
+getattr(obj, name[, default])   从一个对象得到对象的属性；getattr(x, 'y')
+                                等同于x.y;当属性不存在时,如果给出default参数,则返回default,如果没有给出default 则产生一个
+                                AttributeError错误
+hasattr(obj, name)              用给定的name返回对象obj是否有此属性,
+                                此种做法可以避免在getattr(obj, name)时引发错误
+setattr(obj, name, value)       给对象obj的名为name的属性设置相应的值value, set(x,
+                                'y', v) 等同于 x.y = v
+delattr(obj, name)              删除对象obj中的name属性, delattr(x, 'y') 等同于
+                                del x.y
+
+三种方式操作对象的属性：
+object.attribute = value
+setattr(object,attribute,value)
+object.__dict__[attribute] = value
+
+异常（高级）
+
+with 语句：
+    语法： 
+        with表达式1[as 变量名1],表达式2[as 变量名2],...
+作用：
+    用于对资源访问的场合，确保使用过程中不管是否发生异常，都会执行必要的“清理”操作，并释放资源
+    如：
+        文件打开后自动关闭，线程中锁的自动获取和释放（线程后面会讲）
+        资源：CPU，内存资源，显示资源，输入输出资源，硬件设备资源
+说明：
+    with语句与try-finally相似，并不会改变异常状态
+    as 子句用于绑定表达式创建对象
+    with 目前只能用于文件的打开关闭
+示例见：    
+    with.py
+
+环境管理器：
+    1.类内__enter__和__exit__方法的类被称为环境管理器
+    2.能够用with进行管理的对象必须是环境管理器
+    3.__enter__
+    将在进入with语句时被调用并返回由as 变量管理的对象
+    4.__exit__将在离开with语句时被调用，可以用参数来判断离开with语句时是否出现异常并做出相应处理
+
+练习：
+    实现文件的复制（建议使用二进制方式进行操作）
+    #python3 mycp.py
+    请输入源文件：
+    /etc/passwd
+    请输入目标文件：
+    ./mypass.txt
+    提示：文件复制成功或文件复制失败
+
+
+运算符重载：
+    什么是运算符重载
+        让自定义的类生成的对象(实例)能够使用运算符进行操作
+    作用：
+        让实例像数学表达式一样进行运算操作
+        让程序简洁易读
+    说明：
+        运算符重载方法的参数已经有固定的含义，不建议改变原有的含义
+
+    算数运算符
+        方法名               运算符
+        __add__              +
+        __sub__              -
+        __mul__              *
+        __truediv___         /
+        __floordiv__         //
+        __mod__              %
+        __pow__              **
+     反向算数运算符
+        方法名               运算符
+        __radd__              +
+        __rsub__              -
+        __rmul__              *
+        __rtruediv___         /
+        __rfloordiv__         //
+        __rmod__              %
+        __rpow__              **
+    符合赋值运算符重载：
+        方法名               运算符
+        __iadd__              +=
+        __isub__              -=
+        __imul__              *=
+        __itruediv___         /=
+        __ifloordiv__         //=
+        __imod__              %=
+        __ipow__              **=
+
+二元运算符重载方法格式：
+    def __xxx__(self,other):
+        ...
+示例：
+    01_mynumber.py
+    mylist02.py
+    mylist03.py
+
+练习：
+    实现两个定义列表的相加
+
+
+问题：
+    #算法1
+    a = [100]
+    def test(x):
+        x = x + x
+        print(x)
+    text(a)
+    print(a)
+    
+    #算法2
+    a = [100]
+    def test(x):
+        x += x
+        print(x)
+    text(a)
+    print(a)
+
+    因为在list类中定义了__add__ 和__iadd__方法，__add__没有改变原对象
+
+比较运算符的重载：
+    __lt__ <小于
+    __le__ <=小于等于
+    __gt__ >大于
+    __ge__ >=大于等于
+    __eq__ ==等于
+    __ne__ !=不等于
+注：
+    比较运算符通常返回True或False
+
+位运算符重载
+__invert__ ~取反（一元运算符）
+__and__     &位与（交集）
+__or__      |位或（并集）
+__xor__     ^位异或（对称补集）
+__lshift__ << 左移
+__rshift__ >> 右移
+反向位运算符重载
+__rand__     &位与（交集）
+__ror__      |位或（并集）
+__rxor__     ^位异或（对称补集）
+__rlshift__ << 左移
+__rrshift__ >> 右移
+
+符合赋值运算符重载
+__iand__     &=位与（交集）
+__ior__      |=位或（并集）
+__ixor__     ^=位异或（对称补集）
+__ilshift__ <<= 左移
+__irshift__ >>= 右移
+
+一元运算符的重载：
+    __neg__ -符号
+    __pos__ +正号
+    __invert__ ~按位取反
+格式：
+    def __xxx__(self):
+        ...
+示例见：
+    04_mylist.py
+
+in/ not in 运算符的重载：
+格式：
+    def __contains__(self,e): #e代表元素
+        ...
+说明：
+    not in 相当于in取反，所有只需要重载in即可
+示例见：
+    05_in_not_in.py
+
+索引和切片运算符的重载：
+    重载方法：
+    __getitem__(self,i) 用于索引/切片取值
+    __setitem__(self,i) 用于索引/切片赋值
+    __delitem__(self,i) 用于del语句删除索引操作
+作用：
+    让自定义的类型的对象能够支持索引和切片操作
+示例见：
+    06_index.py
+
+练习： 
+    实现有序集合类 OrderSet(),能实现两个集合的交集&，并集|
+，补集~,对称补集^,==,!=等操作（写集合相同）
+要求：
+    集合内部用list存储
+测试用例：
+    s1 = OrderSet([1,2,3,4])
+    s2 = OrderSet([3,4,5])
+    print(s1 & s2)  OrderSet([3,4]) 
+    print(s1 | s2)  OrderSet([1,2,3,4,5])
+    print(s1 ^ s2)  OrderSet([1,2,5])
+    if OrderSet([1,2,3]) != OrderSet([1,2,3,4]):
+        print('不相同')
+    其他自己测试...
+    

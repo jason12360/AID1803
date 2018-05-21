@@ -1,0 +1,1 @@
+print('mypack/office/__init.py被导入')

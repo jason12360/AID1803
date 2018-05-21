@@ -1,0 +1,4 @@
+view:student_view
+controller:student_controller
+model:student
+database:student_info.jdb

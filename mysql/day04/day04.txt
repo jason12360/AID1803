@@ -1,0 +1,212 @@
+MySQL-Day04笔记
+1. MySQL用户账户管理（查看本机ip地址 ifconfig)
+    1.开启MySQL远程连接
+        1.获取root 权限
+            Sudo -i
+        2.cd到配置文件所在路径
+            cd /etc/mysql/mysql.conf.d/
+        3.vi mysqld.cnf
+            #bind-address = 127.0.0.1
+            浏览模式 ->a(插入模式)->esc(浏览模式)->:(命令行模式)->wq(保存并退出)
+        4.重启mysql服务
+            /etc/init.d/mysql restart
+    2.添加授权用户
+        1.使用root用户连接到数据库服务器
+            mysql -root -p123456
+        2.添加新的授权用户
+            create user "用户名"@"IP地址" identified by "密码"
+            create user "tiger"@"%" identified by '123456'
+            IP地址的表示方式:
+                1.% 表示用户可以从任何地址连接到数据库服务器
+                2.localhost 本地
+                3.指定一个IP 表示用户只能从此IP连接到服务器
+    3.给用户授权
+        grant 权限列表 on 库.表 to "用户名"@"IP地址" with grant option;
+        grant all privileges on *.* to "tiger"@"%" with grant option;
+        权限列表：select,update,insert,alter,drop,create,...
+        库.表: *.* 表是所有库的所有表
+        ### 写入到 库mysql下的user表，user,host两个字段
+    4.练习
+        添加一个授权用户 monkey, 所有人都可以连接，只对db1库有查询权限
+        1.添加授权用户money
+        2.给monkey用户授权
+    5.删除授权用户
+        drop user "用户名"@"ip地址"
+2.数据备份(mysqldump,在linux终端操作)
+    1. 命令格式
+        mysqldump -uroot -p 源库名 > 路径/xxx.sql
+    2.备份day03库
+        mysqldump -uroot -p day03 > ~/aid1803/mysql/day04/day03.sql
+    3.源库名的表示方式
+        --all-databases  备份所有库
+        库名              备份单个库
+        -B 库1 库2...     备份多个库
+        库名 表1 表2 ...   备份指定库的指定表
+    4.练习
+        1. 备份所有库 all_mysql.sql,放到用户主目录下的mydata目录中
+        2. 备份db2库中的sheng,city,xian三张表 db2scx.sql
+        3. 备份MOSHOU和db2库，MSdb2.sql
+
+3.数据恢复
+    1.命令格式
+        mysql -u用户名 -p 目标库名 < 路径/xxx.sql
+    2.示例
+        1.先备份库
+        2.删除库
+        3.先创建空库
+        4.恢复命令
+    3.备份分为 完全备份 和增量备份
+        完全备份：mysqldump
+        增量备份: binlog日志，xbackup工具
+    4.从所有库的备份中恢复一个库（--one-database)
+        mysql -u用户名 -p --one-database目标库名 < all_mysql.sql
+        注意：
+            1.恢复库时库中新增的表不会删除
+            2.恢复时必须先创建空库
+4.事物和事物回滚
+    1.定义
+        一件事从开始发生到结束的整个过程
+    2.作用
+        确保数据的一致性
+    3.事务和事务回滚的应用
+        1.mysql中默认sql语句会自动commit到数据库
+            show variables like("autocommit") 
+        2.事务应用
+            1.开启事物
+                mysql> start transaction
+                mysql> ... SQL命令
+                ##此时autocommit被禁用
+            2.终止事物
+                mysql> commit;
+                或者
+                mysql> rollback;
+            3.注意：
+                1.事物回滚rollback只针对表记录的操作，增删改，对创建库，创建表的操作无效
+        3.案例
+            1.背景
+                你：建行卡
+                你朋友：工商卡
+                你在建行的自动提款机给你朋友的工商卡转五千元
+            2.过程
+                1.转账中...
+                    1.先到建行的数据库中把你的余额 -5000
+                    2.再到工行的数据库把你朋友的余额 +5000
+                    3.commit;转账成功
+                      rollbak;回滚
+                2.过程
+                    见day04.sql
+5.存储引擎
+    1.定义
+        是用来处理表的处理器
+    2.存储引擎的基本操作
+        1.查看已有表的存储引擎
+            show create table 表名 #engin = ...
+        2.创建表时指定存储引擎
+            create table 表名(...)engin = myisam;
+        3.查看所有的存储引擎
+            show engines
+    3.工作中使用的存储引擎
+        1.innodb特点
+            1.共享表空间
+                表名.frm 表结构
+                表名.ibd 表记录&索引信息
+            2.支持行级锁
+        2.myisam特点
+            1.独享表空间
+                表名.frm 表结构
+                表名.myd 表记录
+                表名.myi 索引信息
+            2.支持表级锁
+6.锁
+    1.加锁的目的
+        解决客户端并发访问的冲突问题
+    2.锁类型
+        读锁(select)共享锁
+            加读锁之后不能更改表中的内容，但是可以查询
+        写锁(update,delete,insert)互斥锁、排他锁
+    3.锁粒度
+        表级锁
+        行级锁
+        #操作完成后会自动释放锁
+7.如何决定使用哪种存储引擎
+    1.执行查询操作多的表使用myisam存储引擎（使用innodb浪费资源）
+    2.执行写操作比较多的表是有innodb存储引擎
+8.更改表的默认存储引擎
+    1.sudo  -i
+    2.cd /etc/mysql/mysql.conf.d/
+    3.vi mysqld.cnf
+      [mysqld]
+      default-storage-engine = myisam
+    4./etc/init.d/mysql restart
+
+9.memory存储引擎
+    memory：表记录存储在内存中
+        表名.frm 表结构
+        记录存储在内存中
+        ##服务重启之后表结构在，表记录都消失
+10.MySQL调优
+    1.选择合适的存储引擎
+        1.经常用来读的表使用myisam存储引擎
+        2.其余的表都用innodb
+    2.SQL语句调优(尽量避免全表扫描)
+        1.select where order by 常涉及到的字段上建立索引
+        2.where子句中不使用 !=,否则将放弃使用索引进行全表扫描
+        3.尽量避免用NULL值判断，否则将放弃使用索引进行全表扫描
+        4.尽量避免or来连接条件，导致全表扫描
+            示例: 
+                select id from t1 where id =10 or id = 20;
+            优化后
+                select id from t1 where id = 10
+                union all
+                select id from t1 where id = 20;
+        5.模糊查询中尽量避免使用前置%，导致全表扫描
+        6.尽量避免in和 not in，导致全表扫描
+        7.尽量避免使用select * ...要用具体的字段列表代替*,不要返回用不到的任何字段
+
+7.python数据库编程
+    1.python 数据库接口（Python DB-API)
+        1.为开发人员提供的数据库应用编程接口
+        2.支持的数据库服务软件
+            mysql，oracle，SQL_Server,mongodb...
+        3.python提供的操作mysql模块
+            python3:pymysql
+            python2:MYSQLdb
+        4.pymysql模块使用流程
+            1.建立数据库连接
+            2.创建游标对象
+            3.使用游标对象的方法操作数据库
+            4.提交commit
+            5.关闭游标对象
+            6.关闭数据库连接
+        5.建立数据库连接
+            1.语法格式：
+                对象名 =pymysql.connect("主机地址"，"用户名"，"密码"，"库名"，
+                charset='utf8')
+            2.connect连接对象支持的方法
+                1.cursor()   创建一个游标对象
+                2.commit()   提交到数据库执行（表记录增删改）
+                3.rollback() 回滚
+                4.close()    关闭数据库连接
+            3.游标对象支持的方法
+                1.execute("SQL命令") 执行SQL命令
+                2.fetchone() 取得结果集的第一条记录
+                3.fetchmany(n) 取得结果集的n条记录
+                4.fetchall() 取得结果集的所有记录
+                5.close() 关闭游标对象
+8.Mysql workbench(图形化界面管理工具)
+9.ER模型&ER图
+    1.定义
+        Entry-Ralation 实体-关系 模型
+        ER图既实体关系图
+    2.三个概念
+        1.实体
+        2.属性
+        3.关系
+            1.定义：实体之间的关系
+            2.分类
+                一对一关系(1:1):班级和班长
+                一对多关系(1:n):公司和职工
+                多对多关系(n:n):学生和课程
+        4.ER图的绘制
+            1.矩形框代表实体，菱形框代表关系，椭圆形代表属性
+            2.见ER图
