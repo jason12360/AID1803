@@ -27,13 +27,37 @@ class TftpServer:
         		files += filename + '#'
         self.conn.send(files.encode()) 
 
+       #下载功能
+    def download_file(self):
+        filename = self.conn.recv(1024).decode()
+        try:
+        	with open(FILE_PATH + filename,'rb') as fileobj:
+        		file_size = os.path.getsize(FILE_PATH + filename)
+        		self.conn.send(('Y '+str(file_size)).encode())
+        		time.sleep(0.1)
+        		while True:
+        			data = fileobj.read(1024)
+        			if not data:
+        				break
+        			self.conn.send(data)
 
-    def get_file(self, filename):
-        pass
+        except:
+        	self.conn.send(b'N 0')
+        	return
 
     def put_file(self, filename):
-        pass
-
+        file_info = self.conn.recv(1024).decode().split(' ')
+        filename = file_info[0]
+        file_size = file_info[1]
+        with open(filename,'wb') as fileobj:
+        	recved_size = 0
+            while True:
+                data = self.conn.recv(1024)
+                fileobj.write(data)
+                recved_size += 1024
+                if recved_size >= file_size:
+                    break
+           
 
 
 
@@ -75,7 +99,7 @@ def main():
                 if data == 'L':
                     tftp_server.list_file()
                 elif data == 'D':
-                    tftp_server.get_file()
+                    tftp_server.download_file()
                 elif data == 'U':
                     tftp_server.put_file()
                 elif data == 'Q':

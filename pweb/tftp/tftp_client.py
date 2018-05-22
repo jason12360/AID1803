@@ -1,6 +1,6 @@
 # 客户端
-# 	1.查看文件库中有那些文件
-# 	2.选择其中的文件下载到本地
+#     1.查看文件库中有那些文件
+#     2.选择其中的文件下载到本地
 # 	3.将本地的文件上传到文件库
 # 	4.多客户端同时操作
 # tcp协议
@@ -29,13 +29,49 @@ class TftpClient:
             print('请求文件列表失败')
         
 
-    def get_file(self):
-        self.sockfd.send(b'U')
-        filename = input('请输入您要上传的文件')
+    def download_file(self):
+        self.sockfd.send(b'D')
+        filename = input('请输入您要下载的文件')
         self.sockfd.send(filename.encode())
+        data = self.sockfd.recv(1024).decode().split(' ')
+        sent_able = data[0]
+        file_size = int(data[1])
+        time.sleep(0.1)
+        if sent_able == 'Y':
+            with open(filename,'wb') as fileobj:
+                recved_size = 0
+                while True:
+                    data = self.sockfd.recv(1024)
+                    fileobj.write(data)
+                    recved_size += 1024
+                    print('已下载%.2f%%'%((recved_size/file_size)*100),end = '\r')
+                    if recved_size >= file_size:
+                        break
+                print('\n%s下载接收完毕'%filename)
+
+        else:
+            print('下载文件失败')
+
 
     def put_file(self):
-        pass
+        self.sockfd.send(b'U')
+        filename = input('请输入您要上传的文件')
+        try:
+        	with open(filename,'rb') as fileobj:
+        		file_size = os.path.getsize(filename)
+        		file_info = filename +' ' + str(filesize)
+        		self.sockfd.send(fileinfo.encode())
+        		time.sleep(0.1)
+        		while True:
+        			data = fileobj.read(1024)
+        			if not data:
+        				break
+        			self.sockfd.send(data)
+        		 print('\n%s上传完毕'%filename)
+        except:
+        	print('上传文件失败')
+        
+
 
     def quit(self):
         self.sockfd.send(b'Q')
@@ -68,9 +104,8 @@ def main():
         if command == '1':
             tftpclient.put_file()
         elif command == '2':
-            s.send(b'D')
-            filename = input('请输入您要下载的文件')
-            tftpclient.get_file()
+           
+            tftpclient.download_file()
         elif command == '3':
             tftpclient.list_file()
 

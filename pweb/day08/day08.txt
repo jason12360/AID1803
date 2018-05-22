@@ -111,4 +111,6 @@ os.lisrdir(path) 返回一个该路径下的文件的字符串列表
 os.path.isfile(path) 返回该路径下的文件是否为文件
 os.path.isdir(path) 返回该路径下的文件是否为文件夹
 
+作业：完成上传下载功能
+
 

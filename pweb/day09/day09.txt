@@ -1,0 +1,54 @@
+day09笔记
+使用线程实现多线程客户端
+	步骤：
+	1.创建套接字
+	2.准备接收客户端连接
+	3.每当有一个客户端连接进来就创建一个新的线程
+	4.客户端退出后结束响应线程，关闭客户端
+
+基于多线程的HttpServer
+
+	思路：每有一个客户端就有一个线程为其服务
+		 httpserver的功能（解析请求和处理响应）封装成类
+		 所有的静态页面收集到一个文件夹
+		 处理方法放在一个文件夹
+
+	技术实现：
+		并发：多线程
+		server类的设计
+		初始化：将socket返回值变为属性，并且增加一系列其他属性
+
+		服务起启动方法：接收客户端请求创建新的线程
+
+		客户端处理函数：request_handler
+
+cookie:
+	1.sys.path:是一个列表，可以添加路径。该列表中的路径，对python下的所有环境可见
+
+	2.__import__():参数为一个目录，等同于import导入
+
+使用集成模块完成网络并发
+
+	python3 --> socketserver模块	
+	进程tcp并发'ForkingMixIn','TCPServer','StreamRequestHandler'
+	进程udp并发'ForkingMixIn','UDPServer','DatagramRequestHandler'
+	线程tcp并发'ThreadingMixIn','TCPServer',StreamRequestHandler'
+	线程udp并发'ThreadingMixIn','UDPServer','DatagramRequestHandler'
+
+	处理器父类
+	'DatagramRequestHandler'
+	'StreamRequestHandler'
+
+	多进程父类
+	'ForkingMixIn'
+	'ForkingTCPServer' = 'ForkingMixIn' + 'TCPServer'
+	'ForkingUDPServer' = 'ForkingMixIn' + 'UDPServer'
+	
+	多线程父类
+	'ThreadingMixIn'
+	'ThreadingTCPServer' = 'ThreadingMixIn' + 'TCPServer'
+	'ThreadingUDPServer' = 'ThreadingMixIn' + 'UDPServer'
+
+	服务器父类
+	'UDPServer'
+	'TCPServer'
