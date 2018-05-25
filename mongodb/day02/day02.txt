@@ -1,0 +1,316 @@
+day02笔记
+
+db.collectionName 集合对象
+
+	获取集合对象：ab.getCollection('CollectionName')
+
+	查找操作：
+		mysql: select * from tableName
+					||
+					\/
+		mongo: db.collectionName.find()
+
+		find(query,field):
+			功能：查找所有符合条件的文档
+			参数：query: 筛选条件 相当于sql中的where子句
+						以键值对的形式给出查找条件
+						e.g. db.class1.find({age:17},{_id:0,name:1,age:1})
+						*如果不写第一个参数则表示查找所有内容
+
+			     field: 展示的域 相当于sql中select的展示部分
+			     		选择要展示的域，传一组键值对
+			     	    键表示域名
+			     	    值表示是否显示该域：0表示不显示，1表示显示
+
+			     	    *如果某个域给定0，则表示不显示该域，其他的域均显示
+			     	     如果某个域给定1，则表示显示该域，其他的域均不显示
+			     	     _id特殊，永远默认为显示，除非设置为0
+			     	     e.g. db.class0.find({},{_id:0,name:1,age;1})
+
+			返回：返回所有查找到的内容
+
+		findOne()
+			功能参数和find()完全相同，只是返回第一条查找到的文档
+
+		query的更多用法：
+			操作符：使用$符号注明的一个特殊字符串，表示一定的含义
+				e.g. $lt 表示小于
+				e.g. db.class0.find({age:{$eq:17}},{_id:0})
+
+			比较操作符：
+			    操作符                含义
+			————————————————————————————————   
+				$eq                  等于
+				$lt                  小于
+				$lte                 小于等于
+				$gt                  大于
+				$gte                 大于等于
+				$ne                  不等于 *如果没有相应的域，则显示为不等于
+				$in                  包含 e.g.
+				$nin                 不包含 db.class1.find({age:{$in:[16,17,18]}},{_id:0})
+
+			*操作符混合使用：db.class1.find({age:{$lt:19,$gt:0}},{_id:0})
+
+
+			逻辑操作符：
+			    操作符                含义
+			————————————————————————————————   
+				$and                 逻辑与 db.class1.find({$and:[{age:17},{name:'lei'}]},{_id:0})
+				$or                  逻辑或 db.class1.find({$or:[{age:{$lt:17}},{name:'lei'}]},{_id:0})
+				$not                 逻辑非 db.class1.find({age:{$not:{$lt:17}}},{_id:0}) 
+				$nor      条件都不具备逻辑或非 db.class1.find({$nor:[{age:{$gt:18}},{sex:'m'}]},{_id:0})
+			*混合使用：
+			db.class1.find({$and:[{$or:[{age:{$lt:20}},{name:'啊花'}]},{sex:'w'}]},{_id:0})
+			db.class1.find({$or:[{age:{$lte:17}},{name:{$gt:'Tom'},age:{$gt:100}}]},{_id:0})
+	 
+		数组查找：
+			查看数组中包含某一项的
+			e.g. >db.class0.find({hobby:'吃'},{_id:0})
+	             { "name" : "啊蓉", "age" : 26, "hobby" : [ "吃", "外面吃", "玩" ] }
+	             >db.class0.find({hobby:'做综艺'},{_id:0})
+				 { "name" : "宝宝", "age" : 32, "hobby" : [ "拍电影", "做综艺" ] }
+				 { "name" : "啊亮", "age" : 35, "hobby" : [ "做综艺", "拍电影", "代言" ] }
+
+
+	        $all操作符：查找数组中同时包含多项的文档
+	        e.g. >db.class0.find({hobby:{$all:['拍电影','代言']}},{_id:0})
+	             { "name" : "啊亮", "age" : 35, "hobby" : [ "做综艺", "拍电影", "代言" ] }
+
+	        $size操作符：查找数组中元素个数为指定个数的文档
+	        e.g.> db.class0.find({hobby:{$size:2}},{_id:0})
+				{ "name" : "宝宝", "age" : 32, "hobby" : [ "拍电影", "做综艺" ] }
+				{ "name" : "啊哲", "age" : 33, "hobby" : [ "交朋友", "经纪人" ] }
+				{ "name" : "网友", "age" : 3, "hobby" : [ "喷", 1 ] }
+				> db.class0.find({hobby:{$size:3}},{_id:0})
+				{ "name" : "啊蓉", "age" : 26, "hobby" : [ "吃", "外面吃", "玩" ] }
+				{ "name" : "啊亮", "age" : 35, "hobby" : [ "做综艺", "拍电影", "代言" ] }
+
+			$slice操作符：数组的切片显示(写在第二个参数中)
+			显示数组的前两项
+			e.g.> db.class0.find({hobby:{$size:3}},{_id:0,hobby:{$slice:2}})
+				{ "name" : "啊蓉", "age" : 26, "hobby" : [ "吃", "外面吃" ] }
+				{ "name" : "啊亮", "age" : 35, "hobby" : [ "做综艺", "拍电影" ] }
+			跳过第一项显示后面两项
+			e.g.> db.class0.find({hobby:{$size:3}},{_id:0,hobby:{$slice:[1,2]}})
+				{ "name" : "啊蓉", "age" : 26, "hobby" : [ "外面吃", "玩" ] }
+				{ "name" : "啊亮", "age" : 35, "hobby" : [ "拍电影", "代言" ] }
+
+		其他查找方法：
+			$exists操作符：判断一个域是否存在(true)或不存在(false),并显示出来
+			e.g.> db.class1.find({sex:{$exists:true}},{_id:0})
+				{ "name" : "Lily", "age" : 15, "sex" : "w" }
+				{ "name" : "阿狗", "age" : 15, "sex" : "w" }
+				{ "name" : "lei", "age" : 17, "sex" : "m" }
+				{ "name" : "lx", "age" : 17, "sex" : "m" }
+
+			$mod操作符：做除数余数查找
+			$mod:[a,b]--->查找的数字满足除a余b
+			e.g.> db.class1.find({age:{$mod:[3,2]}},{_id:0})
+				{ "name" : "lei", "age" : 17, "sex" : "m" }
+				{ "name" : "lx", "age" : 17, "sex" : "m" }
+
+			$type操作符：查找制定数据类型的文档
+			数据类型编号：
+			Type 	                   Number 	     Alias 	                      Notes
+			——————————————————————————————————————————————————————————————————————————————
+			Double 	                     1     	    “double” 	 
+			String 	                     2     	    “string” 	 
+			Object 	                     3     	    “object” 	 
+			Array 	                     4     	    “array” 	 
+			Binary data                  5     	    “binData” 	 
+			Undefined 	                 6     	    “undefined” 	             Deprecated.
+			ObjectId 	                 7 	        “objectId” 	 
+			Boolean 	                 8 	        “bool” 	 
+			Date 	                     9 	        “date” 	 
+			Null 	                    10 	        “null” 	 
+			Regular Expression       	11 	        “regex” 	 
+			DBPointer 	                12     	    “dbPointer” 	             Deprecated.
+			JavaScript 	                13     	    “javascript” 	 
+			Symbol 	                    14     	    “symbol” 	                 Deprecated.
+			JavaScript (with scope) 	15 	        “javascriptWithScope” 	 
+			32-bit integer 	            16     	    “int” 	 
+			Timestamp 	                17     	    “timestamp” 	 
+			64-bit integer 	            18     	    “long” 	 
+			Decimal128 	                19     	    “decimal” 	                 New in version 3.4.
+			Min key 	                -1 	        “minKey” 	 
+			Max key 	                127 	    “maxKey” 	 	
+
+			e.g.> db.class1.find({_id:{$type:7}},{})
+
+		进一步筛选
+			distinct(域名)
+			功能：查看一个集合中某个域值的覆盖范围
+			e.g.> db.class0.distinct('hobby') #查看集合中hobby列表中有哪些值
+				[ "做综艺", "拍电影", "吃", "外面吃", "玩", "交朋友", "经纪人", 1, "喷", "代言" ]
+
+			pretty()
+			功能：将查询结果格式化显示
+
+			limit(n)
+			功能：查询结果显示前n条
+
+			skip(n)
+			功能：显示时跳过前n条
+
+			count()
+			功能：对查找结果计数统计
+			e.g.> db.class1.find({sex:'m'},{}).count()
+
+			sort({键:1/-1})
+			功能：对查找结果排序
+			1:升序排列，-1：降序排列
+			复合排序： 当第一排序项相同时，按照第二排序项排序
+				{键1:1/-1,键2：1/-1}
+			e.g. > db.class1.find({age:{$exists:true}},{_id:0}).sort({age:-1,name:-1})
+			按照年龄作为第一排序降序排序后，再按照姓名降序排序
+
+		函数的连续使用：
+			示例：
+			> db.class1.find({age:{$exists:true}},{_id:0}).sort({age:-1,name:-1}).limit(3)
+
+	删除文档
+		delete from tableName where ...
+                     |               |		
+                     /		         /
+		db.collectionName.remove(query,justOne)
+			功能：删除制定的文档
+			参数：
+				query:筛选删除的文档，类似where子句，用法同查找操作
+				justOne: 布尔值，默认为false,表示删除所有筛选数据
+							    如果为 true,表示只删除第一条筛选数据
+			示例：> db.class1.remove({$or:[{age:{$exists:false}},{age:{$gt:100}}]})
+			*如果参数为{}，则删除所有文档
+	练习：
+	1.创建一个数据库 名字grade
+	2.数据库中创建一个集合
+	3.集合中插入若干数据，文档格式如下
+		{name:'zhang',age:8,sex:'m',hobby:['a','b','c']}
+		hobby:draw,sing,dance,basketball,football,pingpong
+			  computer
+		age:4-12
+	4.查找练习：
+		1.查看班级所有人信息
+		> a.find({},{_id:0})
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+		{ "name" : "亚索", "age" : 6, "hobby" : [ "sing", "dance", "football" ] }
+		{ "name" : "崔丝塔娜", "age" : 7, "hobby" : [ "sing", "pingpong" ] }
+		{ "name" : "伊泽瑞尔", "age" : 8, "hobby" : [ "dance", "pingpong", "football", "basketball" ] }
+		{ "name" : "卡沙", "age" : 9, "hobby" : [ "sing", "football", "basketball" ] }
+		{ "name" : "雷克赛", "age" : 10, "hobby" : [ "dance", "basketball" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+		{ "name" : "拉克丝", "age" : 13, "hobby" : [ "dance", "sing" ] }
+
+		2.查看班级中年龄为8岁的学生信息
+		> a.find({age:8},{_id:0})
+		{ "name" : "伊泽瑞尔", "age" : 8, "hobby" : [ "dance", "pingpong", "football", "basketball" ] }
+
+		3.查看年龄大于10岁的学生信息
+		> a.find({age:{$gt:10}},{_id:0})
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+		{ "name" : "拉克丝", "age" : 13, "hobby" : [ "dance", "sing" ] }
+
+		4.查看年龄在4-8岁的学生信息
+		> a.find({age:{$gt:4，$lt:8}},{_id:0})
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+		{ "name" : "亚索", "age" : 6, "hobby" : [ "sing", "dance", "football" ] }
+		{ "name" : "崔丝塔娜", "age" : 7, "hobby" : [ "sing", "pingpong" ] }
+
+		5.找到年龄为6岁，且为男生的学生
+		6.找到年龄小于七岁或者大于10岁的学生
+		a.find({$or:[{age:{$gt:10}},{age:{$lt:7}}]},{_id:0})
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+		{ "name" : "亚索", "age" : 6, "hobby" : [ "sing", "dance", "football" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+		{ "name" : "拉克丝", "age" : 13, "hobby" : [ "dance", "sing" ] }
+		7.找到年龄是8岁或者11岁的学生
+		> a.find({age:{$in:[8,11]}},{_id:0})
+		{ "name" : "伊泽瑞尔", "age" : 8, "hobby" : [ "dance", "pingpong", "football", "basketball" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+
+		8.找到兴趣爱好有两项的学生
+		> a.find({hobby:{$size:2}},{_id:0})
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "崔丝塔娜", "age" : 7, "hobby" : [ "sing", "pingpong" ] }
+		{ "name" : "雷克赛", "age" : 10, "hobby" : [ "dance", "basketball" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+		{ "name" : "拉克丝", "age" : 13, "hobby" : [ "dance", "sing" ] }
+
+		9.找到兴趣爱好有画画的学生
+		> a.find({hobby:'draw'},{_id:0})
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+
+		10.找到既喜欢画画，有喜欢跳舞的学生
+		> a.find({hobby:{$all:['draw','sing']}},{_id:0})
+
+		11.统计爱好有三项的学生人数
+		> a.find({hobby:{$size:3}},{_id:0})
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+		{ "name" : "亚索", "age" : 6, "hobby" : [ "sing", "dance", "football" ] }
+		{ "name" : "卡沙", "age" : 9, "hobby" : [ "sing", "football", "basketball" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+
+		12.找出本班年龄第二大的学生
+		> a.find({},{_id:0}).sort({age:-1}).skip(1).limit(1)
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+
+		13.查看学生的兴趣范围
+		> a.distinct('hobby')
+		[
+			"computer",
+			"draw",
+			"basketball",
+			"dance",
+			"football",
+			"sing",
+			"pingpong"
+		]
+
+		14.将学生按年龄排序找到年龄最大的三个
+		> a.find({},{_id:0}).sort({age:-1}).limit(3)
+		{ "name" : "拉克丝", "age" : 13, "hobby" : [ "dance", "sing" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+
+		15.删除所有年级大于12或者小于四岁的学生
+		> a.remove({$or:[{age:{$gt:12}},{age:{$lt:4}}]})
+		WriteResult({ "nRemoved" : 1 })
+		> a.find()
+		{ "name" : "维恩", "age" : 4, "hobby" : [ "draw", "computer" ] }
+		{ "name" : "盖伦", "age" : 5, "hobby" : [ "basketball", "dance", "draw" ] }
+		{ "name" : "亚索", "age" : 6, "hobby" : [ "sing", "dance", "football" ] }
+		{ "name" : "崔丝塔娜", "age" : 7, "hobby" : [ "sing", "pingpong" ] }
+		{ "name" : "伊泽瑞尔", "age" : 8, "hobby" : [ "dance", "pingpong", "football", "basketball" ] }
+		{ "name" : "卡沙", "age" : 9, "hobby" : [ "sing", "football", "basketball" ] }
+		{ "name" : "雷克赛", "age" : 10, "hobby" : [ "dance", "basketball" ] }
+		{ "name" : "瑞文", "age" : 11, "hobby" : [ "sing", "basketball", "pingpong" ] }
+		{ "name" : "卡米尔", "age" : 12, "hobby" : [ "dance", "computer" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

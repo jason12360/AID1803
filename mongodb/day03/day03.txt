@@ -1,0 +1,300 @@
+day03笔记
+
+修改数据
+	mysql: update 表名 set 字段名1 = 值1，字段名2=值2，...where 条件;
+	
+	mongo: db.collectionName.update(query,update,upsert,multi)
+		功能：修改一个文档
+		参数：query:删除要修改的文档，相当于where子句
+				  用法同查找
+		    update:将数据更新为什么内容，相当于sql的set操作，需要使用修改器操作符$set
+		    upsert:bool值，默认为false 表示如果query的文档不存在，则无法修改
+		    			  如果为true，表示如果query的文档不存在，则根据query和update参数插入新的文档
+		    multi:bool值，默认为false,如果有多条符合筛选的文档，则只修改第一条
+		 			 如果为true,表示有多条符合筛选的文档，则修改所有符合条件的文档
+
+		e.g. 将阿红年龄改为24
+			 a.update({name:'阿红'},{$set:{age:24}})
+			 插入一个原来没有的文档
+			 a.update({name:'啊花'},{$set:{age:18,sex:'w'}},true)
+			 把所有年龄大于20的文档的年龄修改为18
+			 a.update({age:{$gt:20}},{$set:{age:18,sex:'w'}},true,true)
+
+	修改器操作符：
+		$set
+			1.修改一个域的值
+			2.增加一个域
+			e.g.> a.update({name:'阿红'},{$set:{sex:'w'}})
+		
+		$unset:删除一个域
+			删除阿红的sex域（后面数字习惯写1,0都表示删除）
+			e.g.> a.update({name:'阿红'},{$unset:{sex:0}})
+
+		$rename:修改一个域的名称
+			把所有sex域改为gender,注意需要将第四个参数设置为true
+			e.g.> a.update({},{$rename:{sex:'gender'}},false,true)
+
+		$setOnInsert:如果update操作插入新的文档，则补充插入内容
+			e.g.> a.update({name:'阿华'},{$set:{age:21},$setOnInsert:{sex:'m',height:1.8}},true)
+
+		$inc 加减修改器
+			将小于18岁的文档的年龄加一
+			e.g.> a.update({age:{$lt:18}},{$inc:{age:1}},false,true)
+			*$inc 可加正数，负数，小数都可以
+		$mul 乘除修改器
+			e.g.> a.update({age:{$lt:18}},{$mul:{age:0.5}},false,true)
+		$min 设定最小值
+			如果筛选的文档制定的值小于min值则不修改，如果大于min值则改为min值
+			e.g.> a.update({},{$min:{age:18}},false,true)
+		$max 设定最大值
+			如果筛选的文档制定的值大于max值则不修改，如果小于max值则改为max值
+
+	    数组修改器：
+	    $push 向数组中添加一项 
+	    e.g.> a.update({name:'Abby'},{$push:{score:30}})
+	    $pushAll 向数组中添加多项
+	    e.g> a.update({name:'Jame'},{$pushAll:{score:[10,20]}})
+	    $each 逐个操作
+	    e.g.将多项加入列表
+	    > a.update({name:'Lily'},{$push:{score:{$each[10,20]}}})
+
+	    $position 选择数组位置进行操作，必须和each合用
+	    e.g.> a.update({name:'Lucy'},{$push:{score:{$each:[10,10],$position:1}}})
+
+	    $sort
+	    对数组进行排序，必须和each合用
+	    e.g.> a.update({name:'Lucy'},{$push:{score:{$each:[],$sort:-1}}})
+
+	    $pull 从数组中删除一项
+	    $pullAll 从数组中删除多项
+	    e.g.> a.update({name:'Lily'},{$pullAll:{score:[10,20]}})
+
+	    $pop 弹出数组中的一项，-1表示弹出第一项，1表示弹出最后一项
+	    e.g.> a.update({name:'Jame'},{$pop:{score:1}})
+
+	    $addToSet 向数组中插入一个元素，但是该元素不能和其他元素重复
+
+数据类型补充
+	时间类型 
+		Mongo中存储时间的格式：ISODate
+		方法1：自动生成当前时间
+		>db.class2.insert({title:'Python入门',data:new Date()})
+		方法2：生成当前时间
+		> db.class2.insert({title:'Python精通',data:ISODate()})
+		方法3：生成当前时间的字符串
+		> db.class2.insert({title:'Python精通',data:Date()})
+
+		制定时间的转换
+			ISODate()
+			功能：生成mongo时间类型
+			参数：如果不加参数则生成当前时间
+				 参数格式 '2018-11-11 11:11:11'
+				 	或者 '20180111 11:11:11'
+				 	或者 '20180111'
+			e.g.> db.class2.insert({title:'Python爬虫',date:ISODate('2017-01-22')})
+
+		时间戳获取
+		e.g.
+		> db.class2.insert({title:'Python爬虫',date:ISODate().valueOf()})
+
+	null：
+		1.如果某个域存在却没有值可以设置为null
+		e.g.> db.class2.insert({title:'Python爬虫',date:null})
+
+		2.表示某个域不存在可以通过null匹配
+		e.g.> db.class2.find({date:null})
+
+	Object类型(值是一个文档):
+		*当使用外层文档引用内部文档的时候可以用.的方法引用在使用时需要加上引号
+		e.g.> db.class2.find({'publication.publisher':'机械工业出版社'},{_id:0})
+
+	数组的下标引用
+		*使用一个数据时，可以使用.序列下标的方式使用数组具体的某一项。同样需要用引号
+		e.g.> db.class3.update({name:'Lily'},{$set:{'score.0':60}})
+
+	文档查找结果的有序性
+		可以通过[]查找结果的序列某一项
+		e.g.> db.class3.find({},{_id:0})[0]
+
+练习：
+	使用之前的grade数据库
+		1.将崔丝塔娜的年龄变为8岁，兴趣爱好变为跳舞，画画
+		> a.update({name:'崔丝塔娜'},{$set:{age:8,hobby:['dance','draw']}})
+
+		2.追加盖伦的兴趣爱好唱歌
+		> a.update({name:'盖伦'},{$push:{hobby:'sing'}})
+
+		3.增加伊泽瑞尔兴趣爱好 吹牛 打篮球
+		> a.update({name:'伊泽瑞尔'},{$pushAll:{hobby:['吹牛','basketball']}})
+
+		4.瑞文增加爱好，跑步和唱歌，不要和以前重复
+		> a.update({name:'瑞文'},{$addToSet:{hobby:{$each:['running','sing']}}})
+
+		5.该班所有同学你年龄+1
+		> a.update({},{$inc:{age:1}},false,true)
+
+		6.删除雷克赛的sex属性
+		> a.update({name:'雷克赛'},{$unset:{sex:1}})
+
+		7.删除盖伦兴趣中的第一项
+		> a.update({name:'盖伦'},{$pop:{hobby:-1}})
+
+		8.将崔丝塔娜兴趣中的画画爱好删除
+		> a.update({name:'崔丝塔娜'},{$pull:{hobby:'draw'}})
+
+索引：
+	指的是建立指定键值及所在文档中存储位置的对照清单。
+	使用索引可以方便我们进行快速的查找，减少遍历次数，提高查找效率。
+
+	mongo中如何创建索引
+		ensureIndex():
+		功能：创建索引
+		参数：索引类别，索引选项
+		e.g.> db.class1.ensureIndex({'name':1})
+		*1表示为该域创建正向索引，-1表示逆向索引
+		*_id域会自动创建索引
+	删除索引：
+		dropIndex()
+			功能：删除索引
+			参数：删除索引名称或者索引键值对
+			e.g. 可以通过索引名称或者索引键值对删除
+			db.class0.dropIndex('name_1')
+			db.class0.dropIndex({name:1})
+		dropIndexes()
+			功能：删除所有索引
+
+	索引类型：
+		1.复合索引
+			根据多个域创建一个索引
+			db.class0.ensureIndex({name:1,age:-1})
+		2.数组索引
+			如果对某个数组域创建索引，那么表示对数组中的每一个值均创建了索引，通过数组中单个值查询，也是索引查询
+		3.子文档索引
+			如果对一个域创建索引，值是一个文档则也会创建索引
+			如果单独对子文档某一个域进行索引创建，则只有通过子文档的该域查找为索引查找
+		4.覆盖索引
+			查找时只获取索引项的的内容，而不必去获取原数据的其他内容，这样就不去连接原来的数据，直接返回即可
+			e.g. name为索引项，显示也只要name域
+			db.class0.find({name:'Lily'},{_id:0,name:1})
+		5.唯一索引unique
+			创建索引时，希望索引域的值均不相同，也可以据此限制索引域的值
+			e.g.> db.class1.ensureIndex({name:1},{'unique':true})
+
+			当对某个域创建了唯一索引后，即不允许插入相同的值
+			> a.insert({name:'lei'}) 出现重复值时
+			WriteResult({
+				"nInserted" : 0,
+				"writeError" : {
+					"code" : 11000,
+					"errmsg" : "E11000 duplicate key error collection: stu.class1 index: name_1 dup key: { : \"lei\" }"
+				}
+			})
+		6.稀疏索引sparse（间隙索引）：
+			只针对有制定域的文档创建索引表，没有该域的文档不会插入到索引表中
+			e.g.> db.class2.ensureIndex({'date':1},{sparse:true})
+
+	索引缺点：
+	1.影响数据的插入，删除，修改操作。当数据发生改变时，索引表必须同步更新
+	2.索引也是需要占用一定的空间资源
+
+	综上：1.当数据库大量的操作是插入，修改，删除操作，而非查询操作时，不适合创建索引
+         2.数据量比较小时，考虑到空间成本，也不适合创建索引
+         3.即使适合创建索引的情况，也不是索引越多越好
+
+聚合
+
+	多数据文档进行整理统计：
+	db.collectionName.aggregate()
+	功能：聚合函数，配合聚合条件进行数据整理统计
+	参数：聚合条件 
+
+	聚合操作符：
+		$group 分组 和分组操作符配合使用确定按什么分组
+			分组操作符    作用                       示例       
+		————————————————————————————————————————————————————————————————————————————————
+		    $sum         求和	> a.aggregate({$group:{_id:'$gender',num:{$sum:1}}})
+		    								聚合         分组     分组依据     每有一个计数为1
+			$avg     求平均数    > a.aggregate({$group:{_id:'$gender',num:{$avg:'$age'}}})
+            $min     求最小值    > a.aggregate({$group:{_id:'$gender',num:{$min:'$age'}}})
+            $max     求最大值    > a.aggregate({$group:{_id:'$gender',num:{$max:'$age'}}})
+            $first每组第一文档制定域值> a.aggregate({$group:{_id:'$gender',avg_num:{$first:'$name'}}})
+            $last 每组最后文档制定域值
+
+     	$project 用于修饰文档的显示结构，同find第二个参数
+     	> db.class1.aggregate({$project:{_id:0,name:1}})
+		{ "name" : "Lily" }
+		{ "name" : "阿狗" }
+		{ "name" : "lei" }
+		{ "name" : "lx" }
+		{ "name" : "阿红" }
+		{ "name" : "阿彪" }
+		{ "name" : "啊花" }
+		{ "name" : "阿华" }
+		不同的是，可以修改原来的显示：
+		> db.class1.aggregate({$project:{_id:0,Name:'$name'}})
+		{ "Name" : "Lily" }
+		{ "Name" : "阿狗" }
+		{ "Name" : "lei" }
+		{ "Name" : "lx" }
+		{ "Name" : "阿红" }
+		{ "Name" : "阿彪" }
+		{ "Name" : "啊花" }
+		{ "Name" : "阿华" }
+
+		$match 过滤数据，操作符的值同find的第一个参数query
+		> db.class1.aggregate({$match:{name:{$gt:'Tom'}}})
+
+		$skip 跳过前几条文档
+		> db.class1.aggregate({$skip:2})
+
+		$limit 显示几条文档
+		> db.class1.aggregate({$limit:2})
+
+		$sort 排序
+		> db.class1.aggregate({$sort:{name:-1}})
+
+		聚合管道
+		将上一个聚合产生的结果交给下一个聚合继续执行
+		>db.collectionName.aggregate([聚合1，聚合2，...])
+		e.g.
+		> db.class1.aggregate([{$match:{name:{$gt:'Tom'}}},{$project:{_id:0,name:1,age:1}},{$sort:{name:-1}}])
+
+
+
+
+
+
+作业：
+使用之前的grade数据库
+增加分数域 score:{'chinese':88,'english':78,'math':98}
+1.按照姓别分组统计每组人数
+> a.aggregate({$group:{_id:'$sex',人数:{$sum:1}}})
+2.按照姓名分组，过滤出有重名的同学
+> a.aggregate([{$group:{_id:'$name',人数:{$sum:1}}},{$match:{人数:{$ne:1}}}])
+3.统计每名男生的语文成绩
+> a.aggregate([{$match:{sex:'m'}},{$project:{'score.chinese':1}}])
+
+4.将女生按照英语分数降序排列
+> a.aggregate([{$match:{sex:'w'}},{$project:{_id:0,name:1,'English':'$score.english'}},{$sort:{English:-1}}])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

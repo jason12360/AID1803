@@ -1,0 +1,145 @@
+day04笔记
+
+固定集合：
+	mongo中可以创建大小固定的集合，称之为固定集合，固定集合的性能出色，适用于很多场景
+	比如：日至处理，临时缓存
+
+	特点：1.插入速度快
+		 2.顺序查询速度快
+		 3.能够淘汰早期数据
+		 4.可以控制集合空间
+	创建：
+		db.createCollection(collectionName,{capped:true,size:10000,max:1000})
+
+		size:设置固定集合的大小
+		max:最多能容纳多少文档
+
+		> a.find()
+		{ "host" : "192.168.1.1", "err" : "404" }
+		{ "host" : "192.168.1.2", "err" : "404" }
+		{ "host" : "192.168.1.3", "err" : "404" }
+		> a.insert({'host':'192.168.1.4',err:'404'})
+		WriteResult({ "nInserted" : 1 })
+		> a.find()
+		{ "host" : "192.168.1.2", "err" : "404" }
+		{ "host" : "192.168.1.3", "err" : "404" }
+		{ "host" : "192.168.1.4", "err" : "404" }
+		第一条记录被删除
+
+文件存储：
+	数据库存储文件的方式
+	1.在数据库中以字符的方式存储文件在本地的路径
+	优点： 节省数据库空间
+	缺点： 当数据库或者文件位置发生变化即需要相应修改数据库内容
+
+	2.将文件以二进制数据的方式存放在数据库里
+	优点：文件存入数据库，数据库在，文件不会丢失
+	缺点：当文件较大时数据库空间占用大，提取困难
+
+	在mongo中存储二进制文件
+		GridFS()
+			功能：大文件存储
+			GridFS是mongodb中大文件存储的一种方案，mongo认为大于16m的文件为大文件
+
+		方案解释：
+			在mongodb数据库中，创建两个集合共同完成对文件的存储
+				1.fs.files:存储文件的相关信息，比如文件名，文件类型等
+				2.fs.chunks:实际存储文件内容，以二进制方式分块存储，将大文件分为多个小块，每块占一个空间
+
+		存储大文件
+			mongofiles -d dbname put file
+		获取大文件
+			mongofiles -d dbname get file
+		如果数据库不存在则自动创建
+		e.g.
+			mongofiles -d grid put dbkoda-latest.AppImage
+			mongofiles -d grid get dbkoda-latest.AppImage
+
+			fs.files
+			{ "_id" : ObjectId("5b0770bd69d72e2a715bd171"), "chunkSize" : 261120, "uploadDate" : ISODate("2018-05-25T02:11:10.259Z"), "length" : 102585950, "md5" : "7e95a3607d672a57a82bb21ba1b2bfa6", "filename" : "dbkoda-latest.AppImage" }
+
+			fs.chunks:
+			{ "_id" : ObjectId("5b0770bd69d72e2a715bd185"), "files_id" : ObjectId("5b0770bd69d72e2a715bd171"), "n" : 19, data:...}
+
+	优缺点：
+		优点：存储方便，方便数据库移植，对文件个数没有太多限制
+		缺点：读写效率低
+
+游标：
+	为什么使用游标：
+	1.防止网络拥塞，造成数据传输慢
+	2.提高用户解析体验，可以后端解析
+
+	var cursor = db.class1.find()创建游标
+	cursor.hasNext()查看是否有下一个数据
+	cursor.next()获取下一个数据
+
+通过python 操作mongodb数据库
+	python---> mongodb编程接口 pymongo
+
+	安装：
+		sudo pip3 install pymongo
+	操作步骤：
+		1.创建mongo数据库的连接对象
+			conn = MongoClient('localhost',27017)
+		2.生成数据库对象
+			db = conn.stu
+		3.生成集合对象
+			my_set = db.class1
+		4.增删改查，索引，聚合操作
+
+			插入数据：insert() insert_many() insert_one() save()
+
+			删除数据：remove({},multi = true)
+				multi:true 表示删除所有符合条件的数据
+					  false 表示删除一条
+		    数据查找：
+			    find()
+				    功能：查找数据库内容
+				    参数：同mongo shell find()
+				    返回值：返回一个游标-->迭代器
+				cursor属性：
+					next()
+					count()
+					limit()
+					skip()
+					sort():
+						mongoshell ---> sort({'name':1})
+						pymongo --->sort(['name':1])
+						*进行排序时游标要确保没有被访问过
+				find_one()
+					返回值是一个字典
+
+			数据修改：
+				update()
+					参数和mongoshell中update相同
+				update_many()
+					匹配到多个文档时全部修改
+				update_one()
+					只修改匹配到的第一条文档
+
+				*编程中mongo的数据类型null可以用python中的None替代
+
+			索引：
+				创建索引：
+					ensure_index()
+						返回值：索引名称
+						复合索引传参：
+							[(要创建索引的域1：正序还是逆序),(要创建索引的域2：正序还是逆序)]
+						#唯一索引
+							index = cls.ensure_index('name',unique=True)
+					create_indexes()
+
+				查看索引：
+					list_indexes()
+
+				删除索引：
+					drop_index() 删除某一个索引
+					drop_indexes() 删除所有索引
+
+			聚合：
+				aggregate([])
+				参数:与mongoshell中聚合参数写法一致
+				返回值：迭代器，同find返回值
+
+
