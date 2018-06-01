@@ -24,8 +24,9 @@ def do_login(view):
 			'用户名或密码不存在')
 def do_register(view):
 	view.destroy()
-	r = Register_View(view.parent)
-	r.focus_set()	
+	r = Register_View(view.parent,view.font)
+	r.config(height = 400,width =300)
+	r.place(relx=0.75,rely =0.5, anchor=CENTER)	
 def islegal(username,password):
 	'''
 	这个方法用来判断用户名是否符合规定

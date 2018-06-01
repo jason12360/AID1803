@@ -1,35 +1,40 @@
 from tkinter import *
 import login_handler
 import tkinter.messagebox
-from widgets_interface.dialog import Dialog
+from widgets_interface.view_block import Block
+from widgets_interface.my_widgets import Mybutton,Myentry
 from view_exception import *
 
 
-class Register_View(Dialog):
+class Register_View(Block):
+	def __init__(self,parent,font):
+		self.font = font
+		super().__init__(parent)
 	def buttonbox(self):
 		box = Frame(self)
-		w = Button(box,text= '确认注册',width =10,command=self.register,default = ACTIVE)
-		w.pack(side=LEFT,padx = 5,pady = 5)
-		w = Button(box,text= '放弃注册',width =10,command=self.cancel)
-		w.pack(side = LEFT,padx =5,pady = 5)
+		w = Mybutton(box,font = self.font,text= '确认注册',width =20,fun=self.register)
+		w.pack(side=TOP,padx = 5,pady = 5)
+		w = Mybutton(box,font = self.font,text= '放弃注册',width =20,fun=self.cancel)
+		w.pack(side = BOTTOM,padx =5,pady = 5)
 
 		self.bind('<Return>',self.register)
 		self.bind('<Escape>',self.cancel)
-		box.pack()
+		box.place(relx=0.5,rely =0.85,anchor=CENTER)
 
-	def body(self,master):
-		Label(master,text='用户名：').grid(row = 0)
-		Label(master,text='密码：').grid(row = 1)
-		Label(master,text='确认密码：').grid(row = 2)
+	def body(self):
+		body = Frame(self)
+		Label(body,font = self.font,text='用户名：',fg = '#555555',anchor = W,width = 20).grid(row = 0)
+		Label(body,font = self.font,text='密码：',fg = '#555555',anchor = W,width = 20).grid(row = 2)
+		Label(body,font = self.font,text='确认密码：',fg = '#555555',anchor = W,width = 20).grid(row = 4)
 
-		self.e1 = Entry(master)
-		self.e2 = Entry(master)
-		self.e3 = Entry(master)
+		self.e1 = Myentry(body,font = self.font)
+		self.e2 = Myentry(body,font = self.font)
+		self.e3 = Myentry(body,font = self.font)
 
-		self.e1.grid(row = 0,column =1)
-		self.e2.grid(row = 1,column = 1)
-		self.e3.grid(row = 2,column = 1)
-		return self.e1
+		self.e1.grid(row = 1,column = 0)
+		self.e2.grid(row = 3,column = 0)
+		self.e3.grid(row = 5,column = 0)
+		body.place(relx=0.5,rely =0.35,anchor=CENTER)
 
 	def register(self,event = None):
 		register_handler.do_register(self)
