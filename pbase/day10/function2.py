@@ -1,0 +1,4 @@
+def doNoting():
+	pass
+
+doNoting()
