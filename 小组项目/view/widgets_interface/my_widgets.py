@@ -42,6 +42,22 @@ class Mybubble(tk.Frame):
 		self.text_lable = tk.Label(self,text = self.text)
 		self.text_lable.place(relx = 0.5,rely = 0.5,anchor = tk.CENTER)
 
+class Scrollabe_Frame(tk.Canvas):
+	def __init__(self,master,_width,_height,**kwargs):
+		super().__init__(master,kwargs,width = _width,height=_height)
+		self.pack_propagate(0)
+
+		frame=tk.Frame(self) #把frame放在self里
+		frame.place(width=_width, height=_height) #frame的长宽，和self差不多的
+		vbar=tk.Scrollbar(self,orient=tk.VERTICAL) #竖直滚动条
+		vbar.set(0,0.2)
+		vbar.pack(side=tk.RIGHT, fill=tk.Y)
+		vbar.configure(command=self.yview)
+		self.config(yscrollcommand=vbar.set) #设置  
+		
+		self.create_window((90,240), window=frame)  #create_window
+		self.frame =frame
+
 
 def fun1():
 	print('hahahhah')
@@ -60,7 +76,13 @@ def main():
 	e.pack()
 	b = Mybutton(top,fun1,text = '登录',width = 15,height =2)
 	b.pack(pady = 10)
-	bubble = Mybubble(top,'sajkd')
+	# bubble = Mybubble(top,'sajkd')
+	s = Scrollabe_Frame(top,_width=1000,_height=1000,scrollregion=(0,0,520,520))
+	s.pack()
+
+	for i in range(100):
+		tk.Label(s.frame,text='测试').pack()
+	
 
 
 	top.wm_title('菜单')

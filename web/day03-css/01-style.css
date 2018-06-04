@@ -1,0 +1,13 @@
+div {
+        /*控制页面中所有的div的样式
+		 *文字大小为36px
+		 *文本颜色为红色
+		 *背景颜色为黄色*/
+         
+        font-size: 18px;
+/*        color: red;
+        background-color: yellow;*/
+}
+a{
+	text-decoration: none;
+}
