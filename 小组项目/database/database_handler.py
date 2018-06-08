@@ -2,7 +2,7 @@
 
 import pymysql
 import re
-from file import File
+# from file import File
 
 
 
@@ -95,11 +95,11 @@ class My_Mysql:
 
 def main():
     my_mysql = My_Mysql()
-    my_mysql.create_user_table()
-    my_mysql.create_file_table()
-    my_mysql.create_userlog_table()
+    # my_mysql.create_user_table()
+    # my_mysql.create_file_table()
+    # my_mysql.create_userlog_table()
     # my_mysql.add_user('jason','12345')
-    # print(my_mysql.select_user('jason'))
+    print(my_mysql.select_user('jason'))
     # f = File('database_handler.py')
     # f.set_last_mtime(20180101101010)
     # f.set_file_create_time(20180101101010)

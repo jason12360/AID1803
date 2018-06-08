@@ -1,0 +1,72 @@
+body>div{
+	font-size: 14px;
+	font-family: "微软雅黑"
+
+}
+.title{
+	width: 1280px;
+	height:67px;
+	padding:15px 0px 10px;
+	box-sizing: border-box;
+	line-height: 42px;
+	border-top:1px solid #CCC;
+	margin:0px auto;
+}
+.more{
+	float: right;
+	color: #333;
+	cursor: pointer;
+
+}
+.item-list{
+	width: 1290px;
+	margin:0px auto;
+}
+.item-list>div{
+	float: left;
+	width: 248px;
+	height: 305px;
+	margin:0px 5px 5px;
+	cursor: pointer;
+	position: relative;
+}
+
+.item-image img{
+	width: 248px;
+	position: relative;
+	transition: transform 0.3s;
+	margin:0px auto;
+	vertical-align: middle;
+}
+.item-image{
+	overflow: hidden;
+	width: 248px;
+	height: 248px;
+	margin-bottom: 5px;
+}
+.item-image img:hover{
+	transform:scale(1.1);
+}
+.item-name{
+	width: 210px;
+	color: 	#555;
+	padding-left:2px;
+	line-height: 24px;
+
+}
+.price{
+	line-height: 24px;
+	margin-left: 5px;
+	color:#999;
+}
+
+.shopping-chart{
+	background-image: url(images/icons.png);
+	width: 34px;
+	height:34px;
+	position: absolute;
+	bottom: 5px;
+	right:2px;
+	background-repeat: no-repeat;
+	background-position: -517px -243px;
+}

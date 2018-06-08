@@ -3,3 +3,6 @@ class UsrnameOrPasswdBlankException(Exception):
 
 class UsrnameOrPasswdNotExistException(Exception):
 	pass
+
+class UsrnameOrPasswdAlreadyExistException(Exception):
+	pass

@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.font as tkFont  
-from PIL import Image,ImageTk
+
 
 
 class Mybutton(tk.Label):
@@ -31,32 +31,41 @@ class Myentry(tk.Entry):
 		self.config(highlightcolor = '#32CD32',highlightthickness = 2,bd = 0.5,relief = tk.FLAT,highlightbackground='#CCCCCC')
 class Mybubble(tk.Frame):
 	def __init__(self,master,text,**kwargs):
-		super().__init__(master,kwargs)
+		super().__init__(master,height=80,width=350)
+		# self.pack_propagate(0)
 		self.text = text
-		self.pack(fill=tk.BOTH, expand=1)
-		imagefile = Image.open('resources/bubble_left.png')
-		img = ImageTk.PhotoImage(imagefile)
-		self.image_lable = tk.Label(self,image = img)
-		self.image_lable.image = img
+		self.pack(fill=tk.X)
+		photo = tk.PhotoImage(file='widgets_interface/resources/bubble.gif')
+		#photo = tk.PhotoImage(file='resources/bubble.gif')
+		self.image_lable = tk.Label(self,image = photo,anchor=tk.W)
+		self.image_lable.image = photo
 		self.image_lable.place(relx = 0.5,rely = 0.5,anchor = tk.CENTER)
-		self.text_lable = tk.Label(self,text = self.text)
+		self.text_lable = tk.Label(self,anchor=tk.W,width=40)
+		self.text_lable.config(bg='#FFFFFF',text = self.text)
 		self.text_lable.place(relx = 0.5,rely = 0.5,anchor = tk.CENTER)
 
 class Scrollabe_Frame(tk.Canvas):
 	def __init__(self,master,_width,_height,**kwargs):
 		super().__init__(master,kwargs,width = _width,height=_height)
 		self.pack_propagate(0)
-
-		frame=tk.Frame(self) #把frame放在self里
-		frame.place(width=_width, height=_height) #frame的长宽，和self差不多的
+		self.pack()
+		self.width = _width
+		frame=tk.Frame(self,height=2000,width=_width)
+		frame.pack_propagate(0) 
 		vbar=tk.Scrollbar(self,orient=tk.VERTICAL) #竖直滚动条
-		vbar.set(0,0.2)
 		vbar.pack(side=tk.RIGHT, fill=tk.Y)
-		vbar.configure(command=self.yview)
+		vbar.config(command=self.yview)
 		self.config(yscrollcommand=vbar.set) #设置  
 		
-		self.create_window((90,240), window=frame)  #create_window
+		self.create_window((0,0), window=frame,anchor=tk.NW)  #create_window
 		self.frame =frame
+		self.bar = vbar
+	def flush(self):
+		self.delete(self.frame)
+		self.frame=tk.Frame(self,width =self.width)
+		self.create_window((0,0), window=self.frame,anchor=tk.NW)
+
+		
 
 
 def fun1():
@@ -76,12 +85,17 @@ def main():
 	e.pack()
 	b = Mybutton(top,fun1,text = '登录',width = 15,height =2)
 	b.pack(pady = 10)
-	# bubble = Mybubble(top,'sajkd')
-	s = Scrollabe_Frame(top,_width=1000,_height=1000,scrollregion=(0,0,520,520))
-	s.pack()
+	# frame = tk.Frame(top)
+	# frame.pack(fill=tk.X)
+	# bubble = Mybubble(frame,'sajkd')
+	# bubble.pack()
+	s = Scrollabe_Frame(top,_width=400,_height=500
+		,scrollregion=(0,0,400,2500))
+
 
 	for i in range(100):
-		tk.Label(s.frame,text='测试').pack()
+
+		Mybubble(s.frame,text='测试').pack(fill=tk.X)
 	
 
 

@@ -1,41 +1,71 @@
-from view_exception import *
-from login_view import Login_View
-from register_view import Register_View
-from register_view import *
-import tkinter.messagebox
-def do_login(view):
-	if not view.validate():
-		view.initial_focus.focus_set()
-		return
-	username = view.e1.get()
-	password = view.e2.get()
-	#检测用户名
-	try:
-		islegal(username,password)
-		view.withdraw()
-		view.update_idletasks()	
-	except UsrnameOrPasswdBlankException:
-		tkinter.messagebox.showerror(
-			'检测用户名',
-			'用户名或密码不能为空')
-	except UsrnameOrPasswdNotExistException:
-		tkinter.messagebox.showerror(
-			'检测用户名',
-			'用户名或密码不存在')
-def do_register(view):
-	view.destroy()
-	r = Register_View(view.parent,view.font)
-	r.config(height = 400,width =300)
-	r.place(relx=0.75,rely =0.5, anchor=CENTER)	
-def islegal(username,password):
-	'''
-	这个方法用来判断用户名是否符合规定
-	初级阶段暂定规定为用户名和密码不为空
-	'''
-	#假设用户在数据库中
-	exist_in_database = True
-	if (not username) or (not password):
-		raise UsrnameOrPasswdBlankException()
-	elif not exist_in_database:
-		raise UsrnameOrPasswdNotExistException()
-	return 
+# 导入自定义异常模块
+from view.view_exception import *
+# 这是一个控制器类,用来控制视图的IO响应
+
+
+class Login_handler:
+    def __init__(self, page):
+        self.page = page
+
+    def bind_connection(self, connection):
+        self.connection = connection
+    # 定义当登录子界面登录按钮被触发时执行的事件
+
+    def do_login(self):
+        username = self.page.login_view.e1.get()
+        password = self.page.login_view.e2.get()
+        # 检测用户名
+        try:
+            self.islegal(username, password)
+            data = '+'.join(['login', username, password,'@end'])
+            self.connection.send(data.encode())
+            response = self.connection.recv(1024).decode()
+            if response == 'Y':
+                print('登录成功')
+            else:
+                raise UsrnameOrPasswdNotExistException()
+
+        except UsrnameOrPasswdBlankException:
+            self.page.login_view.show_error_message('用户名或密码不能为空')
+        except UsrnameOrPasswdNotExistException:
+            self.page.login_view.show_error_message('用户名或密码不存在')
+    # 定义当登录子界面注册按钮被触发时执行的事件
+
+    def login_do_register(self):
+        self.page.close_login_view()
+        self.page.create_register_view()
+
+    def register_do_register(self):
+        username = self.page.register_view.e1.get()
+        password = self.page.register_view.e2.get()
+        # 检测用户名
+        try:
+            self.islegal(username, password)
+            data = '+'.join(['reg', username, password,'@end'])
+            self.connection.send(data.encode())
+            response = self.connection.recv(1024).decode()
+            if response == 'Y':
+                print('注册成功')
+            else:
+                raise UsrnameOrPasswdAlreadyExistException()
+
+        except UsrnameOrPasswdBlankException:
+            self.page.register_view.show_error_message('用户名或密码不能为空')
+        except UsrnameOrPasswdAlreadyExistException:
+            self.page.register_view.show_error_message('用户名已被注册,请重新输入')
+
+    def do_cancel(self, view):
+        
+        self.connection.send(b'quit+ + +@end')
+        view.close()
+
+        self.page.close()
+
+    def islegal(self, username, password):
+        '''
+        这个方法用来判断用户名是否符合规定
+        规定:用户名和密码不为空
+                用户名必须是由字母或数字或下划线组成
+        '''
+        if (not username) or (not password):
+            raise UsrnameOrPasswdBlankException()
