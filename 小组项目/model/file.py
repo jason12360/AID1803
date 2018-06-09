@@ -46,6 +46,10 @@ class File(object):
 
     def get_creat_time(self):
         return self.file_create_time
+    def pack(self):
+        result = ','.join(list(self.get_info()))
+        result ='['+result+']'
+        return result
 
 
 
