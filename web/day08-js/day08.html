@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>day08-JS-笔记</title>
+    <style>
+    body {
+        font-family: "微软雅黑"
+    }
+    </style>
+</head>
+
+<body>
+    <h1>一.基本数据类型</h1>
+    <h2>1.number类型</h2>
+    <h3>数字类型,可以表示32位的整数或64位的浮点数</h3>
+    <h4>整数:允许表示十进制,八进制,十六进制<h4>
+				<ul>
+					<li>十进制:var num=321;</li>
+					<li>八进制:var num=010;</li>
+					<li>十六进制: var num=0x1A;</li>
+					<li><a href="01-dataType-number.html">例子</a></li>
+				</ul>
+				<h4>小数:</h4>
+    <ul>
+        <li>小数计算法:var num=123.456;</li>
+        <li>指数计算法:var num=1.5e3; e3等于10的3次方</li>
+    </ul>
+    <h2>2.string类型</h2>
+    <h3>字符串类型</h3>
+    <h4>由Unicode的字符,数字和标点组成</h4>
+    <p>注意:字符串在使用时必须用''或""引起来</p>
+    <h5>每个字符都有自己的unicode码</h5>
+    <ul>
+        <li>
+            1.查看字符的unicode码
+            <br> var str='张';
+            <br> var r = str.charCodeAt() //得到十进制Unicode;
+            <br> r.toString(16)//将r转换为16进值的字符串
+            <br>
+            <a href="01-dataType-string.html">例子</a>
+        </li>
+        <li>
+            2.如何将unicode码转换为对应的字符
+            <br> 已知Unicode码:5f20
+            <br> var str = '\u5f20';//正确写法 var str = '\'+5f20;//错误写法
+        </li>
+        <li>
+            3.中文的范围
+            <br> "\u4e00"~"\u9fa5"
+        </li>
+        <li>
+            4.转义字符
+            <ul>
+                <li>\n:换行</li>
+                <li>\t:制表符</li>
+                <li>\":"</li>
+                <li>\':'</li>
+                <li>\\:\</li>
+            </ul>
+        </li>
+    </ul>
+    <h2>boolean类型</h2>
+    <p>布尔类型,只用于表示真(true)或假(false)</p>
+    <p>注意:boolean类型可以参与到数字运算中:true为1,false为0</p>
+    <h2>undefined类型</h2>
+    <p>产生undefined场合</p>
+    	<ul>
+    		<li>1.声明变量未赋值</li>
+    		<li>2.访问对象不存在的属性时</li>
+    	</ul>
+    <h2>查看数据类型</h2>
+    <p>允许使用typeof()或typeof查看变量的数据类型</p>
+    <br>
+    var num =35
+    <br>
+    var t1=typeof(num)
+    <br>
+    var t2=typeof num
+    <br>
+    <a href="01-dataType-string.html">例子</a>
+
+	<h1>二.数据类型转换</h1>
+	<p>不同的数据类型之间的数据在进行运算时如何转换的<p>
+	<h2>1.隐式转换</h2>
+	<h3>1.数字+字符串</h3>
+		<p>将数字先转换成字符串,再进行拼接</p>
+		<p>var num=15;</p>
+		<p>var str='18';</p>
+		<p>var r = num+str;//1518</p>
+		<p>var r = '15'+18+15//151815</p>
+		<p>var r = 15+18+'15'//3315</p>
+		<p>var r = '15'+(18+15)//1533</p>
+	<h3>2.数字+布尔</h3>
+		<p>将布尔类型装换为数字</p>
+	<h3>3.布尔+字符串</h3>
+		<p>将布尔装换为字符串,再拼接</p>
+		<p>var b = true;</p>
+		<p>var s = '你好'</p>
+		<p>var r = b+s</p>
+		<p>r:'true你好'</p>
+	<h4>注意:</h4>
+		<p>任意类型与字符串做加法运算时,都是将其他类型装换为字符串再拼接</p>
+		<p>字符串与数字进行运算时</p>
+			<ul>
+				<li>加法:拼接</li>
+				<li>其余操作(-,*,/,%):先将字符串转换为数字,再进行运算</li>
+			</ul>
+
+	<h2>2.显示转换(转换函数,强制转化)</h2>
+		<h3>1.toString()</h3>
+			<p>将任意类型的数据转换为字符串,并返回转换后的结果</p>
+			<h4>语法</h4>
+			<p>var r = 变量.toString();</p>
+		<h3>2.parseInt</h3>
+			<p>作用:将任意类型的数据转化为整数,如果实在无法转换的话,则返回NaN(Not a Number)</p>
+			<h4>语法</h4>
+			<p>var r = partseInt(数据);</p>
+			<p>ex:</p>
+			<p>1.var r = parseInt('13.5');//13</p>
+			<p>2.var r = parseInt('13你好');//13</p>
+			<p>3.var r = parseInt('你好13');//NaN</p>
+			<a href="01-dataType-transfer.html">示例</a>
+		<h3>3.parseFloat</h3>
+			<p>作用等同于parseInt(),允许转换为小数</p>
+			<p>
+				var r = parseFloat('35.5abc');//35.5
+			</p>
+			<p>
+				var r = parseFloat('abc35.5');//NaN
+			</p>
+		<h3>4.Number()</h3>
+			<p>将任意类型的数据转换为数字,只要包含非法字符的话,结果就为NaN</p>
+			<p>var r = Number('35.5')//35.5</p>
+			<p>var r = Number('35你好')//NaN</p>
+		<h3><a href="01-dataType-exer.html">练习</a></h3>
+<h1>运算符</h1>
+	<h2>1.算数运算符</h2>
+	<h3>+,-,*,/,%,++,--</h3>
+	<p>++:自增运算符,在自身数据的基础上只做+1运算</p>
+	<p>--:自减运算符,在自身数据的基础上只做-1运算</p>
+	<p>ex: var a = 15;</p>
+	<p>a++;//++做后缀,先使用变量的值,再自增</p>
+	<p>++a;//++做前缀,对变量先自增再使用</p>
+	<a href="01-operator-doublePlus.html">示例</a>
+	<h2>2.关系运算符(比较运算符)</h2>
+	<h3>>,<,>=,<=,==,!=,===,!==</h3>
+	<p>10 > 5 :true</p>
+	<p>'10' > 5: true</p>
+	<p style="font-weight: bold">如果运算符的两端有一个操作数是数字的话,那么另外一个会自动通过Number()进行转换,然后在进行比较</p>
+	<p>'10a'< 5:false</p>
+	<p>'10a'> 5:false</p>
+	<p style="font-weight: bold">NaN和任意类型除了做'不等于'运算返回值均为false</p>
+	<p>'张三丰'>'张无忌': false</p>
+	<p style="font-weight: bold">比较每位字符的unicode码,以不相等的为准,最终比较"三"和"无"的Unicode码(charCodeAt())</p>
+	<p>'10'>'5':false</p>
+	<p>'50'>'5':true</p>
+	<h4>===和!==</h4>
+	<p>'5'== 5:true</p>
+	<p style="font-weight: bold">===:比较数据的数值和数据类型都相等的情况下结果才为真</p>
+	<p>'5'===5:false</p>
+	<h4>!==:比较数据的数值和数据从类型又要有一个不等,结果就是真</h4>
+	<p>'5'!==5:true</p>
+	<h2>3.逻辑运算符</h2>
+	<p>!:非,对现有条件取反</p>
+	<p>&&:逻辑与</p>
+	<p>||:逻辑或</p>
+	<a href="01-operator-practise.html">练习</a>
+	<h2>4.位运算符</h2>
+	<h3>1.按位与:&</h3>
+	<p>3&5:1</p>
+	<p>3--011(二进制)</p>
+	<p>5--101(二进制)</p>
+	<h4>判断一个数字的奇偶性</h4>
+	<p style="font-weight: bold;color: red">--任意数字与1做按位与操作,结果为1是奇数,结果为0是偶数</p>
+	<h3>2.按位或:|</h3>
+	<p style="font-weight: bold;color: red">任意小数与0做按位或操作,快速取整(抛弃小数位,保留整数位)</p>
+	<h3>3.按位异或:^</h3>
+	<p>两个数字的二进制位进行比较,不同则为1,相同则为0</p>
+	<p>3^5:110</p>
+	<p style="font-weight: bold;color: red">^的作用:在不借助第三方变量的前提下,交换两个数字</p>
+	<p>a=a^b,b=b^a,a=a^b</p>
+	<h2>条件运算符</h2>
+	<h3>单目运算符/一元运算符:有一个操作数的运算符</h3>
+	<p>++,--,!,typeof</p>
+	<h3>双目运算符/二元运算符:有两个操作数的运算符</h3>
+	<p>=,-,*,/,%,...,&&,||,&,|</p>
+	<h3>三目运算符/三元运算符:有三个操作输的运算符</h3>
+	<p>?</p>
+	<h4>条件运算符:</h4>
+	<p>条件表达式:表达式1:表达式2;</p>
+	<p>先判断条件表达式的值,如果为true,则执行表示1的操作,否则则执行表达式2的操作</p>
+	<h2>赋值运算符</h2>
+	<p>a op= b</p>
+	<p>var num=5;</p>
+	<p>num+=1;</p>
+</html>

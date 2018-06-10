@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var c = window.prompt('请输入一个字符');
+		var isDigit=(c>='0'&& c<='9');
+		var isLowerLetter=(c>='a' && c<='z');
+		var isUpperLetter=(c>='A' && c<='Z');
+		var isChinese = c.charCodeAt()>0x4e00 && c.charCodeAt()<0x9fa5;
+		console.log('是数字吗?'+isDigit);
+		console.log('是英文吗?'+(isLowerLetter||isUpperLetter));
+		console.log('是汉字吗?'+isChinese);
+	</script>
+</body>
+</html>

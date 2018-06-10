@@ -2,7 +2,8 @@
 
 import pymysql
 import re
-# from file import File
+from file import File
+from file_folder import Filefolder
 
 
 
@@ -63,7 +64,7 @@ class My_Mysql:
 				inner join file on userlog.file_id = file.id'
         self.cursor.execute(sql)
         return self.cursor.fetchall()
-# 字典表——————————————————————————————————————————
+# 文件表——————————————————————————————————————————
 
     def create_file_table(self):
         self.cursor.execute(
@@ -77,20 +78,45 @@ class My_Mysql:
     def add_file(self, file):
         sql = 'insert into file(filename,filesize,file_path_on_server,\
                                 last_modified_time,first_create_time)\
-                                 values("%s",%d,"%s",%d,%d);' % file.get_info()
+                                 values("%s",%d,"%s","%s","%s");' % file.get_info()
         self.cursor.execute(sql)
         self.db.commit()
-    # 查询字典
-
+    #程序刚开始时读取全部文件信息,返回文件夹
+    def select_all_files(self):
+        sql = 'select * from file'
+        self.cursor.execute(sql)
+        file_folder = Filefolder()
+        while True:
+            _ = self.cursor.fetchone()
+            if not _:
+                break
+            file_info =(_[1],_[2],_[3],_[4].strftime('%Y-%m-%d %H:%M:%S'),_[5].strftime('%Y-%m-%d %H:%M:%S'))
+            file = File(*file_info)
+            file_folder.add_file(file)
+        return file_folder
+#在数据库通过id查找相关文件返回file
     def select_file_by_id(self, id):
         sql = 'select * from file where id = %d' % id
         self.cursor.execute(sql)
-        return self.cursor.fetchall()
+        _ = self.cursor.fetchone()
+        if not _:
+            return None
+        else:
+            file_info =(_[1],_[2],_[3],_[4].strftime('%Y-%m-%d %H:%M:%S'),_[5].strftime('%Y-%m-%d %H:%M:%S'))
+            file = File(*file_info)
+            return file
+#在数据库通过文件名查找相关文件返回file
 
     def select_file_by_filename(self, filename):
         sql = 'select * from file where filename = "%s"' %filename
         self.cursor.execute(sql)
-        return self.cursor.fetchall()
+        _ = self.cursor.fetchone()
+        if not _:
+            return None
+        else:
+            file_info =(_[1],_[2],_[3],_[4].strftime('%Y-%m-%d %H:%M:%S'),_[5].strftime('%Y-%m-%d %H:%M:%S'))
+            file = File(*file_info)
+            return file
 
 
 def main():
@@ -99,13 +125,14 @@ def main():
     # my_mysql.create_file_table()
     # my_mysql.create_userlog_table()
     # my_mysql.add_user('jason','12345')
-    print(my_mysql.select_user('jason'))
-    # f = File('database_handler.py')
+    # print(my_mysql.select_user('jason'))
+    # f = File()
+    # f.create_file('database_handler.py')
     # f.set_last_mtime(20180101101010)
     # f.set_file_create_time(20180101101010)
     # print(f.get_info())
     # my_mysql.add_file(f)
-    # print(my_mysql.select_file_by_filename('database_handler.py'))
+    print(my_mysql.select_file_by_id(1).pack())
     # my_mysql.add_userlog((1,1,'upload',10200912000000))
     # print(my_mysql.select_userlog())
 
