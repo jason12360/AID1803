@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var year = prompt('请输入年份');
+		var month = prompt('请输入月');
+		var day = Number(prompt('请输入年天'));
+		var totalDay=0;
+		var i = Number(month);
+		do{
+			switch(i){
+				case 12:
+				case 10:
+				case 7:
+				case 5:
+					totalDay = totalDay + 30;
+					break;	
+				case 11:
+				case 9:
+				case 8:
+				case 6:
+				case 4:
+				case 2:
+					totalDay = totalDay + 31;
+					break;
+				case 3:
+					if (year%400==0 ||(year%4==0&&year%100!=0)){
+						totalDay = totalDay +29;
+					}else{
+						totalDay = totalDay +28;
+					}
+					break;
+				case 1:
+					totalDay = totalDay + day-1;
+			}
+			i--;
+		}while(i!=0);
+		while(year>1900){
+			year--
+			if(year%4==0&&year%100!=0||year%400==0){
+				totalDay+=366;
+			}else{
+				totalDay+=365;
+			}
+		}
+		console.log(totalDay);
+		console.log('今天是星期'+(totalDay%7+1));
+
+	</script>
+</body>
+</html>

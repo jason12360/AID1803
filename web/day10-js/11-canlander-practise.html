@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="buttonClick()">日期计算器</button>
+    <script>
+    function isRun(year) {
+        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function buttonClick() {
+        var year = prompt('请输入年份');
+        var month = prompt('请输入月');
+        var day = Number(prompt('请输入年天'));
+        var totalDay = 0;
+        var i = Number(month);
+        do {
+            switch (i) {
+                case 12:
+                case 10:
+                case 7:
+                case 5:
+                    totalDay = totalDay + 30;
+                    break;
+                case 11:
+                case 9:
+                case 8:
+                case 6:
+                case 4:
+                case 2:
+                    totalDay = totalDay + 31;
+                    break;
+                case 3:
+                    isRun(year) ? totalDay = totalDay + 29 : totalDay = totalDay + 28;
+                    break;
+                case 1:
+                    totalDay = totalDay + day;
+            }
+            i--;
+        } while (i != 0);
+        var j=year;
+        while (j > 1900) {
+            j--
+            isRun(j) ? totalDay = totalDay + 366 : totalDay = totalDay + 365;
+        }
+        var show=''
+        switch(totalDay % 7){
+        	case 0: 
+        		show = '日';
+        		break; 
+        	case 1: 
+        		show = '一';
+        		break; 
+        	case 2: 
+        		show = '二';
+        		break;  
+        	case 3: 
+        		show = '三';
+        		break;  
+        	case 4: 
+        		show = '四';
+        		break;  
+        	case 5: 
+        		show = '五';
+        		break;  
+        	case 6: 
+        		show = '六';
+        		break;  
+        }
+        console.log(year+'年'+month+'月'+day+'日'+'是星期' + show);
+    }
+    </script>
+</body>
+
+</html>

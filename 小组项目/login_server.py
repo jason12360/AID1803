@@ -1,5 +1,5 @@
 from socket import *
-from database.database_handler import My_Mysql
+from model.database_handler import My_Mysql
 import sys
 from threading import Thread
 

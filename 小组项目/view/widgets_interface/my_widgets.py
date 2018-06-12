@@ -1,5 +1,6 @@
 import tkinter as tk
-import tkinter.font as tkFont  
+import tkinter.font as tkFont 
+import file_displayer 
 
 
 
@@ -29,14 +30,29 @@ class Myentry(tk.Entry):
 	def __init__(self,master,**kwargs):
 		super().__init__(master,kwargs)
 		self.config(highlightcolor = '#32CD32',highlightthickness = 2,bd = 0.5,relief = tk.FLAT,highlightbackground='#CCCCCC')
+class MyPasswordEntry(Myentry):
+	def __init__(self,master,**kwargs):
+		super().__init__(master,**kwargs)
+		self.config(show='*')
+#继承此类,复写key方法,完成相应处理
+class MySearchEntry(Myentry):
+	def __init__(self,master,**kwargs):
+		super().__init__(master,**kwargs)
+		self.bind('<Key>',self.key)
+	def key(self,event):
+		pass
+
 class Mybubble(tk.Frame):
 	def __init__(self,master,text,**kwargs):
 		super().__init__(master,height=80,width=350)
 		# self.pack_propagate(0)
 		self.text = text
 		self.pack(fill=tk.X)
-		photo = tk.PhotoImage(file='widgets_interface/resources/bubble.gif')
-		#photo = tk.PhotoImage(file='resources/bubble.gif')
+		#用于测试,如果主函数调用则,使用下方图片路径,非主函数条用使用上方图片路径
+		if __name__ !='__main__':
+			photo = tk.PhotoImage(file='widgets_interface/resources/bubble.gif')
+		else:
+			photo = tk.PhotoImage(file='resources/bubble.gif')
 		self.image_lable = tk.Label(self,image = photo,anchor=tk.W)
 		self.image_lable.image = photo
 		self.image_lable.place(relx = 0.5,rely = 0.5,anchor = tk.CENTER)
@@ -74,6 +90,8 @@ def main():
 	top = tk.Tk()
 	top.geometry('400x500')
 	BIG_FONT = tkFont.Font(size = 20)
+	se = MySearchEntry(top)
+	se.pack()
 	l = tk.Label(top,text = '用户名:',anchor = tk.W,width = 20,height =1,fg = '#555555')
 	l.pack()
 	e = Myentry(top)
@@ -81,7 +99,7 @@ def main():
 	e.focus_set()
 	l = tk.Label(top,text = '密码:',anchor = tk.W,width = 20,height =1,fg = '#555555')
 	l.pack()
-	e = Myentry(top)
+	e = MyPasswordEntry(top)
 	e.pack()
 	b = Mybutton(top,fun1,text = '登录',width = 15,height =2)
 	b.pack(pady = 10)
@@ -91,11 +109,11 @@ def main():
 	# bubble.pack()
 	s = Scrollabe_Frame(top,_width=400,_height=500
 		,scrollregion=(0,0,400,2500))
-
+	text_list = ['python.py','4kb','/tarena/home/aid1803/tt/s','2018-9-14 23:00:00','2018-9-14 23:00:00']
 
 	for i in range(100):
 
-		Mybubble(s.frame,text='测试').pack(fill=tk.X)
+		file_displayer.ListItems(s.frame,text_list)
 	
 
 

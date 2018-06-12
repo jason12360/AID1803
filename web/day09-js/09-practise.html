@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var target = Math.random()*100|0;
+		while(true){
+			var num =prompt('请输入你要猜的数');
+			if (num > target){
+				console.log('你输入的数大了');
+			}else if(num < target){
+				console.log('你输入的数小了');
+			}else if(num == target){
+				console.log('你猜对了');
+				break;
+			}else if(num == 'exit'){
+				console.log('程序退出');
+				break
+			}else{
+				console.log('输入有误');
+			}
+		}
+	</script>
+</body>
+</html>

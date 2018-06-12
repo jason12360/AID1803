@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var num = prompt('请输入一个数字:');
+		var issu = true;
+		for(var i=2;i<num;i++){
+			if(num%i==0){
+				issu =false;
+				break;
+			}
+
+		}
+		issu==true?console.log('是素数'):console.log('不是素数');
+	</script>
+</body>
+</html>

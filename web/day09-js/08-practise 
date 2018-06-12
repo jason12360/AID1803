@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		var year = Number(window.prompt('请输入年'));
+		var month =Number(window.prompt('请输入月'));
+		var day = Number(window.prompt('请输入日'));
+		//判断闰年,则二月为29天
+		var days = 0;
+		do{
+			switch(month){
+				case 12:
+				case 10:
+				case 7:
+				case 5:
+					days = days + 30;
+					break;	
+				case 11:
+				case 9:
+				case 8:
+				case 6:
+				case 4:
+				case 2:
+					days = days + 31;
+					break;
+				case 3:
+					if (year%400==0 ||(year%4==0&&year%100!=0)){
+						days = days +29;
+					}else{
+						days = days +28;
+					}
+					break;
+				case 1:
+					days = days + day;
+			}
+			month--;
+		}while(month!=0);
+		console.log('你输入的日期是该年的第'+days+'天')
+				
+	</script>
+</body>
+</html>
