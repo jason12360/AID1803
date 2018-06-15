@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<!-- 	练习:
+					1.创建网页
+						一个文本框,一个div,一个按钮
+					2.点击按钮:
+						文本框文字以一级标题显示在div中 -->
+	<div id="d1"></div>
+	<input type="text" id='t1'>
+	<script>
+		function showLabel(){
+			d1 = document.getElementById('d1');
+			t1 = document.getElementById('t1');
+			d1.innerHTML = '<h1>'+t1.value+'</h1>';
+		}
+	</script>
+	<button onclick="showLabel()">点我</button>
+
+</body>
+</html>

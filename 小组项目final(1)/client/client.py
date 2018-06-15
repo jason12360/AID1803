@@ -3,10 +3,14 @@
 # 第二个进程将使用udp进行聊天通信
 from socket import *
 import signal
-from multiprocessing import Process
-import web.client_control_port
-import web.chat_port_client
+from multiprocessing import Process,Queue
+import web.client_control_port as client_control_port
+import web.chat_port_client as chat_port_client
 
+#创建队列
+Q=Queue(1)
+# def client_control_port(control_socket, data_socket):
+#     client_control_port.run(data_socket, ctrl_socket)
 
 # def client_control_port(control_socket, data_socket):
 #     client_control_port.run(data_socket, ctrl_socket)
@@ -14,7 +18,7 @@ import web.chat_port_client
 
 def control_port():
     # 建立登录和主要功能连接,端口号为xxx
-    CTRL_HOST = '176.122.16.176'
+    CTRL_HOST = ''
     CTRL_PORT = 18527
     CTRL_ADDR = (CTRL_HOST, CTRL_PORT)
     ctrl_socket = socket()
@@ -24,6 +28,7 @@ def control_port():
     DATA_PORT = 18528
     DATA_ADDR = (DATA_HOST, DATA_PORT)
     data_socket = socket()
+    data_socket.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
     #客户端监听套接字
     data_socket.bind(DATA_ADDR)
     data_socket.listen(10)

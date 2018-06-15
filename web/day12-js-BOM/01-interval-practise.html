@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function showTime(){
+			var now = new Date();
+			console.log('\r'+now.toLocaleTimeString());
+		}
+		var timer;
+		function start(){
+			timer = setInterval(showTime,1000);
+
+		}
+		function stop(){
+			clearInterval(timer);
+		}
+	</script>
+	<button onclick="start()">开始</button>
+	<button onclick="stop()">暂停</button>
+</body>
+
+</html>

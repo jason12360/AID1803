@@ -3,15 +3,17 @@
 # 第二个进程将使用udp进行聊天通信
 from socket import *
 from signal import *
-from multiprocessing import Process
+from multiprocessing import Process,Queue
 import signal
-if __name__!='__main__':
+if __name__=='__main__':
+    import web.server_control_port as server_control_port
+    import web.chat_port_server as chat_port
+else:
     import server_control_port
     import chat_port
-else:
-    import web.server_control_port
-    import web.chat_port
 
+#创建队列
+Q=Queue(1)
 
 # def server_control_port(myconnection, addr):
 #     server_control_port.run(data_socket, myconnection, addr)

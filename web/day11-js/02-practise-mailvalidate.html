@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function mail(){
+			var str = prompt('请输入一个邮箱')
+			if(str.indexOf('@')==-1||
+				str.indexOf('.')==-1||
+				str.lastIndexOf('@')>=str.lastIndexOf('.')){
+				alert('邮箱格式有误')
+			} 
+			else{
+				alert('邮箱格式正确')
+			}
+		}
+	</script>
+	<button onclick="mail()">验证邮箱格式</button>
+</body>
+</html>

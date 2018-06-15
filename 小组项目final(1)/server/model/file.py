@@ -18,10 +18,10 @@ class File(object):
         self.usrid = None
 
     def get_info(self):
-        return (self.filename, self.filesize, self.server_path, self.file_last_mtime, self.file_create_time)
+        return (self.filename, self.filesize, self.file_last_mtime, self.file_create_time, self.server_path)
 
     def get_info_for_pack(self):
-        return (self.filename, str(self.filesize), self.server_path, self.file_last_mtime, self.file_create_time)
+        return (self.filename, str(self.filesize), self.file_last_mtime, self.file_create_time, self.server_path)
 
     def get_name(self):
         return self.filename
@@ -65,9 +65,9 @@ class File(object):
     def unpack(self,string):
         self.filename, \
         self.filesize, \
-        self.filelocal_path, \
         self.file_last_mtime,\
-        self.file_create_time = string[1:-1].split(',')
+        self.file_create_time,\
+        self.server_path= string[1:-1].split(',')
     	
 
 

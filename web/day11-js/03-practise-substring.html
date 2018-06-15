@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function getMailInfo(){
+			var mail = prompt('请输入您的邮箱');
+			var atIndex = mail.indexOf('@');
+			var username =mail.substring(0,atIndex);
+			var server = mail.substring(atIndex+1);
+			alert('用户名是:'+username+'\n'+'供应商是:'+server);
+		}
+		function getIdBirthday(){
+			var id = prompt('请输入身份证号码');
+			var year = id.substring(6,10);
+			var month = id.substring(10,12);
+			var day = id.substring(12,14);
+			alert('生日:'+year+'年'+month+'月'+day+'日');
+
+		}
+	</script>
+	<button onclick="getMailInfo()">获取邮箱相关相关信息</button>
+	<button onclick="getIdBirthday()">获取身份证号码</button>
+</body>
+</html>

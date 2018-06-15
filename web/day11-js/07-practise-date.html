@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function showTime(){
+			var now = new Date();
+			var dateTime =[];
+			dateTime.push(now.getFullYear());
+			dateTime.push(now.getMonth()+1);
+			dateTime.push(now.getDate());
+			dateTime.push(now.getDay());
+			dateTime.push(now.getHours());
+			dateTime.push(now.getMinutes());
+			dateTime.push(now.getSeconds());
+			for(var i =0;i<dateTime.length;i++){
+				if(dateTime[i]<10 && i != 3){
+					dateTime[i] = '0'+dateTime[i];
+				}else if(i==3){
+					switch(dateTime[i]){
+						case 0:
+							dateTime[i]='日';
+							break;
+						case 1:
+							dateTime[i]='一';
+							break;
+						case 2:
+							dateTime[i]='二';
+							break;
+						case 3:
+							dateTime[i]='三';
+							break;
+						case 4:
+							dateTime[i]='四';
+							break;
+						case 5:
+							dateTime[i]='五';
+							break;
+						case 6:
+							dateTime[i]='六';
+							break;
+					}
+				}
+			}
+			console.log(dateTime[0]+'年'+dateTime[1]+'月'+dateTime[2]+'日'+'  '+dateTime[4]+'时'+dateTime[5]+'分'+dateTime[6]+'秒'+'  星期'+dateTime[3])
+
+		}
+	</script>
+	<button onclick="showTime()">显示时间</button>
+</body>
+</html>

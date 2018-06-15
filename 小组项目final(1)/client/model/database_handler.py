@@ -2,9 +2,12 @@
 
 import pymysql
 import re
-from file import File
-from file_folder import Filefolder
-
+if __name__ == '__main__':
+    from file import File
+    from file_folder import Filefolder
+else:
+    from model.file import File
+    from model.file_folder import Filefolder
 
 
 class My_Mysql:
@@ -21,7 +24,7 @@ class My_Mysql:
 # 用户表——————————————————————————————————————————
     def create_user_table(self):
         self.cursor.execute(
-            'create table user(id int primary key auto_increment,username char(20) unique,password char(30))default charset=utf8;')
+            'create table user(id int primary key auto_increment,username char(20) unique,password char(100))default charset=utf8;')
         self.db.commit()
     # 增加用户
 

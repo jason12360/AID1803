@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function changeMirco(){
+			var target= "Microsoft is a big company,microsoft's color is red has MICROSOFT logo like microsoft";
+			var regex = /microsoft/ig;
+			var arr = target.match(regex);
+			target = target.replace(regex,'微软');
+			console.log(target);
+			console.log('共出现'+arr.length+'个microsoft');
+
+		}
+	</script>
+	<button onclick="changeMirco()">替换</button>
+</body>
+</html>

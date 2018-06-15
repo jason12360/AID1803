@@ -2,8 +2,12 @@
 
 import pymysql
 import re
-from file import File
-from file_folder import Filefolder
+if __name__=='__main__':
+    from file import File
+    from file_folder import Filefolder
+else:
+    from model.file import File
+    from model.file_folder import Filefolder
 
 
 

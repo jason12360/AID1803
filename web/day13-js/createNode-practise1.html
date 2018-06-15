@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function createDiv(){
+			var elem = document.createElement('div');
+			elem.id = 'container';
+			elem.innerText = '动态创建的div';
+			$('main').insertBefore(elem,$('pp'));
+			// $('div').innerHTML = ....
+		}
+	</script>
+	<button onclick="createDiv()">动态创建</button>
+	<div id="main">
+		<p id="pp">这是一段测试p元素</p>
+	</div>
+	<script src = '../common.js'></script>
+</body>
+</html>

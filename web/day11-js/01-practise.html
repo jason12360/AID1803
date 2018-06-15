@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+    function generateCode(n) {
+
+        var resource = [];
+        for (i = 'a'.charCodeAt(); i <= 'z'.charCodeAt(); i++) {
+            resource.push(String.fromCharCode(i));
+        }
+        for (i = 'A'.charCodeAt(); i <= 'Z'.charCodeAt(); i++) {
+            resource.push(String.fromCharCode(i));
+        }
+        for (i = '0'.charCodeAt(); i <= '9'.charCodeAt(); i++) {
+            resource.push(String.fromCharCode(i));
+        }
+        var code = ''
+        for (i = 0; i < n; i++) {
+            var index = (Math.random() * resource.length) | 0;
+            code += resource[index];
+        }
+        return code;
+    }
+
+    function authenCode() {
+        var code = generateCode(6);
+        var input = prompt('请输入以下验证码:\n' + code);
+        if (input.toLowerCase() == code.toLowerCase()) {
+            alert('验证通过');
+        } else {
+            alert('验证失败,请重新输入');
+            authenCode();
+        }
+    }
+    </script>
+    <button onclick="authenCode()">生成二维码</button>
+</body>
+
+</html>

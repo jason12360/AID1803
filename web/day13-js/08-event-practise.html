@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		#d1,#d2{
+			width: 500px;
+			height: 400px;
+			border: 1px solid #000;
+		}
+		#d2{
+			width: 200px;
+			height: 200px;
+			position: absolute;
+			top:10px;
+			left:300px;
+			display: none;
+		}
+	</style>
+	<script src='../common.js'></script>
+	<script>
+		window.onload=function(){
+			$('d1').onmousemove=function(event){
+				$('d2').style.display='block';
+				$('d2').innerHTML = event.offsetX +','+event.offsetY;
+				$('d2').style.backgroundImage='url("../day05-css/huiyuan.jpg")';
+				$('d2').style.backgroundPosition='-'+(event.offsetX*1.2) +'px '+'-'+(event.offsetY*1.2)+'px';
+				$('d2').style.backgroundSize='600px 480px'
+				// $('d2').style.overflow='hidden';
+				// $('d2').style.scale='1.2';
+
+			}
+			$('d1').onmouseout=function(event){
+				$('d2').style.display='none';
+
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="d1">
+		<img src="../day05-css/huiyuan.jpg" alt="">
+	</div>
+	<div id="d2"></div>
+</body>
+</html>

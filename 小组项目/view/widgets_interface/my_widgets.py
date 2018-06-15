@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.font as tkFont 
-import file_displayer 
+import widgets_interface.file_displayer 
 
 
 
@@ -62,7 +62,7 @@ class Mybubble(tk.Frame):
 
 class Scrollabe_Frame(tk.Canvas):
 	def __init__(self,master,_width,_height,**kwargs):
-		super().__init__(master,kwargs,width = _width,height=_height)
+		super().__init__(master,kwargs,width = _width,height=_height,bg='#000000')
 		self.pack_propagate(0)
 		self.pack()
 		self.width = _width
@@ -88,7 +88,7 @@ def fun1():
 	print('hahahhah')
 def main():
 	top = tk.Tk()
-	top.geometry('400x500')
+	top.geometry('1000x500')
 	BIG_FONT = tkFont.Font(size = 20)
 	se = MySearchEntry(top)
 	se.pack()
@@ -107,8 +107,8 @@ def main():
 	# frame.pack(fill=tk.X)
 	# bubble = Mybubble(frame,'sajkd')
 	# bubble.pack()
-	s = Scrollabe_Frame(top,_width=400,_height=500
-		,scrollregion=(0,0,400,2500))
+	s = Scrollabe_Frame(top,_width=1200,_height=500
+		,scrollregion=(0,0,1200,2500))
 	text_list = ['python.py','4kb','/tarena/home/aid1803/tt/s','2018-9-14 23:00:00','2018-9-14 23:00:00']
 
 	for i in range(100):

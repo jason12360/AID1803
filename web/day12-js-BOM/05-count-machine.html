@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			font-size: 8px;
+			line-height: 40px;
+
+		}
+		button{
+			width: 40px;
+			height: 40px;
+			padding: 0px;
+			line-height: 40px;
+			text-align: center;
+			color:#FFFFFF;
+			background-color: darkred;
+			border: none;
+			cursor: pointer;
+			vertical-align: middle;
+		}
+		
+		input{
+			width: 80px;
+			height: 40px;
+			display: inline-block;
+			border: none;
+			text-align: center;
+			border: 1px solid darkred;
+			vertical-align: middle;
+			color:#000000;
+			box-sizing: border-box;
+		}
+
+	</style>
+</head>
+<body>
+<script>
+	// function count_plus(){
+	// 	var t1 = document.getElementById('t1');
+	// 	var t1Value = parseInt(t1.getAttribute('placeholder'));
+	// 	t1Value+=1;
+	// 	t1.setAttribute('placeholder',''+t1Value) 
+		
+	// }
+	// function count_minus(){
+	// 	var t1 = document.getElementById('t1');
+	// 	var t1Value = parseInt(t1.getAttribute('placeholder'));
+	// 	if(t1Value>1){
+	// 	t1Value-=1;
+	// }
+	// 	t1.setAttribute('placeholder',''+t1Value) 
+		
+	// }
+	function btnOperation(btn){
+		 if(btn.innerText=='+'){
+			var txtNum = btn.previousElementSibling;
+			txtNum.value = ++txtNum.value;
+		 }else{
+		 	var txtNum = btn.nextElementSibling;
+		 	if(txtNum.value > 1)
+		 	txtNum.value = --txtNum.value;
+		 }
+
+	}
+</script>
+	<button onclick="btnOperation(this)">-</button>
+	<input type="text" value="1">
+	<button onclick="btnOperation(this)">+</button>
+</body>
+</html>

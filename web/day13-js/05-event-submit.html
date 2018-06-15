@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src='../common.js'></script>
+    <script>
+    window.onload = function() {
+        /*为form绑定submit事件*/
+        $('frm').onsubmit = function() {
+            return$('uname').value.length >= 6 && $('uname').value.length <= 18 && $('upwd').value.length >= 6 && $('upwd').value.length <= 18
+        }
+        /*为uname绑定focus事件*/
+        $('uname').onfocus = function() {
+            $('uname-show').innerHTML = '用户名必须6到18位';
+        }
+        /*为uname绑定blur事件*/
+        $('uname').onblur = function() {
+            if (this.value.length >= 6 && this.value.length <= 18) {
+                $('uname-show').innerHTML = '通过';
+            } else {
+                $('uname-show').innerHTML = '用户名称不符合规范';
+            }
+        }
+        $('upwd').onfocus = function() {
+            $('upwd-show').innerHTML = '密码必须6到18位';
+        }
+        /*为upwd绑定blur事件*/
+        $('upwd').onblur = function() {
+            if (this.value.length >= 6 && this.value.length <= 18) {
+                $('upwd-show').innerHTML = '通过';
+            } else {
+                $('upwd-show').innerHTML = '密码称不符合规范';
+            }
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <form action="/login/" id="frm">
+        <p>
+            用户名称:
+            <input type="text" name="uname" id="uname">
+            <span id="uname-show"></span>
+        </p>
+        <p>
+            用户密码:
+            <input type="password" name="upwd" id="upwd">
+            <span id="upwd-show"></span>
+        </p>
+        <p>
+            <input type="submit" value="提交">
+        </p>
+    </form>
+</body>
+
+</html>

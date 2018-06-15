@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function changeA(){
+			a = document.getElementById('a1');
+			a.innerHTML='TMOOC';
+			a.setAttribute('href','http://www.tmooc.cn');
+		}
+	</script>
+	<a href="http://www.baidu.com" id="a1">百度</a>
+	<button onclick="changeA()">修改</button>
+</body>
+</html>

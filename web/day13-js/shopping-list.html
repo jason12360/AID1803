@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			font-family: '微软雅黑'
+		}
+		table{
+			border-collapse:collapse;
+			width: 1000px;
+			font-size:20px;
+		}
+		table,td{
+  		border: 1px solid black;
+  		}
+  		thead>tr>td{
+  			background-color: darkred;
+  			color: white;
+			border: 1px solid #999999;
+  		}
+  		td{
+			padding-left: 5px;
+
+  		}
+  		.row1{
+  			width:30%;
+  		}
+  		.row2{
+  			width: 20%;
+  		}
+  		.row3{
+  			width: 20%;
+  		}
+  		.row4{
+  			width: 30%;
+
+  		}
+  		.row4 button{
+  			margin:10px;
+  			border: none;
+  			background-color: white;
+  			text-decoration: underline;
+  			font-size: 20px;
+  		}
+	</style>
+</head>
+<body>
+	<script src ='../common.js'></script>
+	<script>
+		function addItem(){
+			elements = $('inputArea').children;
+			//找到输入的东西
+			var name = elements[0].value;
+			var price = elements [1].value;
+			var quantity = elements [2].value
+			var tr = document.createElement('tr');
+			$('outputArea').appendChild(tr);
+			var td = document.createElement('td');
+			td.innerHTML = name;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = price;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = quantity;
+			tr.appendChild(td);
+			var td = document.createElement('td');
+			td.innerHTML = '<button>修改</button><button onclick="delItem(this)">删除</button>';
+			td.setAttribute('class','row4');
+			tr.appendChild(td);
+		}
+		function delItem(item){
+			item.parentNode.parentNode.parentNode.removeChild(item.parentNode.parentNode);
+		}
+	</script>
+	<div id='inputArea'>
+		<input type="text" placeholder="商品名称">
+		<input type="text" placeholder="商品价格">
+		<input type="text" placeholder="购买数量">
+		<button onclick="addItem()">增加</button>
+	</div>
+	<div >
+		<table>
+			<thead>
+			<tr>
+				<td class="row1">商品名称</td>
+				<td class="row2">商品价格</td>
+				<td class="row3">购买数量</td>
+				<td class="row4">操作</td>
+			</tr>
+			</thead>
+			<tbody id='outputArea'>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function getCartInfo(){
+			var cartString = '1045_5&10221_8&73569_6';
+			var cartlist = cartString.split('&');
+			console.log('共买了'+cartlist.length+'件商品');
+			for(var i=0;i<cartlist.length;i++){
+				itemId = cartlist[i].split('_')[0];
+				itemNo = cartlist[i].split('_')[1];
+				console.log('编号:'+itemId);
+				console.log('数量:'+itemNo);
+			}
+		}
+	</script>
+	<button onclick="getCartInfo()">获取购物车信息</button>
+</body>
+</html>
