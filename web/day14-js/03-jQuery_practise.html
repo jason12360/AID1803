@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <p id="p1">唐诗鉴赏</p>
+        <p>床前明月光</p>
+        <p>疑似地上霜</p>
+        <p>举头望明月</p>
+        <p>低头思故乡</p>
+        <p>白日依山尽</p>
+        <p>黄河入海流</p>
+        <p>欲穷千里目</p>
+        <p>更上一层楼</p>
+    </div>
+    <script src='../jquery-1.11.3.js'></script>
+    <script>
+    function changeColor() {
+        $('#p1~p:even').css('background', '#CCC');
+    }
+
+    function hide() {
+        $('#p1~p:gt(3)').css('display', 'none');
+    }
+    </script>
+    <button onclick="changeColor()">变色</button>
+    <button onclick="hide()">隐藏</button>
+</body>
+
+</html>

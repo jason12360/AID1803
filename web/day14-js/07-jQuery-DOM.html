@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="container">id为container的元素</div>
+	<button onclick='btnNew()'>创建新元素</button>
+	<script src='../jquery-1.11.3.js'></script>
+	<script>
+		function btnNew(){
+			var $img=$('<img>');
+			$img.attr('src','timg.jpeg');
+			// $('#container').prepend($img);
+			$('#container').after($img);
+		}
+	</script>
+</body>
+</html>

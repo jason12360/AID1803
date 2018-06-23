@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		#test{
+			width: 200px;
+			height: 400px;
+			background: red;
+			border: 2px solid #000;
+		}
+	</style>
+	<script src='../jquery-1.11.3.js'></script>
+	<script>
+		$(function(){
+			//为btnHide绑定事件
+			$('#btnHide').click(function(){
+				$('#test').hide(5000);
+			});
+			//为btnShow绑定事件
+			$('#btnShow').click(function(){
+				$('#test').show(5000);
+			});
+
+			$('#btnSlideUp').click(function(){
+				$('#test').slideUp(5000);
+			});
+
+			$('#btnSlideDown').click(function(){
+				$('#test').slideDown(5000);
+			});
+
+			$('#btnFadeIn').click(function(){
+				$('#test').fadeIn(5000);
+			});
+
+			$('#btnFadeOut').click(function(){
+				$('#test').fadeOut(5000);
+			});
+
+		});
+	</script>
+</head>
+<body>
+	<button id="btnHide">基本隐藏</button>
+	<button id="btnShow">基本显示</button>
+	<button id="btnSlideUp">滑动隐藏</button>
+	<button id="btnSlideDown">滑动显示</button>	
+	<button id="btnFadeIn">淡入</button>
+	<button id="btnFadeOut">淡出</button>
+	<div id='test'>
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab facilis rerum, dicta molestias veniam quasi beatae laborum, libero veritatis tenetur nostrum? Hic, quisquam exercitationem mollitia incidunt dolore perspiciatis maxime, sapiente sequi ea nemo! Velit molestiae dolores consequatur officia sint illum, ducimus est veniam ipsa libero magnam fuga eum, maxime ratione.
+	</div>
+
+</body>
+</html>

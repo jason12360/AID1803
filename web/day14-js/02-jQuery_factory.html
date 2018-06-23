@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="main">
+		这是id为main的div
+	</div>
+	<button onclick="btnClick()">获取元素</button>
+	<button onclick="domToJQ()">DOM-->jQuery</button>
+	<button onclick="JQToDOM()">jQuery-->DOM</button>
+	<script src = '../jquery-1.11.3.js'></script>
+	<script>
+		function btnClick(){
+			//通过jquery选择器获取id='main'的元素
+			var  m = $('#main');
+			m.html('动态设置的html的值')
+			console.log(m.html());
+		}
+		function domToJQ(){
+			var main = document.getElementById('main');
+			var $main = $(main);
+			$main.html('装换为JQ对象成功!!!');
+		}
+		function JQToDOM(){
+			//使用jQuery来获取id为main的元素
+			var $main =$('#main') ;
+			var main = $main[0];
+			main.innerHTML='装换为DOM对象成功!!!';
+		}
+	</script>
+</body>
+</html>

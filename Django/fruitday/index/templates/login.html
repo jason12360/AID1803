@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/dailyfruit2.0.css">
+    {% block logo_title %}
+    <title>天天果园登录界面</title>
+        
+    {% endblock logo_title %}
+
+</head>
+
+<body>
+    <p id="title">
+    {% block page_title %}
+        
+    会员登录
+    {% endblock page_title %}
+    </p>
+    <div id="main">
+        <div id="left-pic">
+        	<img src="/static/img/huiyuan.jpg" alt="">
+            {% block anchor %}
+                
+            <a href="{% url 'register' %}">会员注册></a>
+            {% endblock anchor %}
+        </div>
+        {% block formhead %}
+        <div id='right-login'>
+                
+            <form action="login" method="POST">
+            {% endblock formhead %}
+
+                <div>
+                    <span class="left-text">手机号</span>
+                    <input type="text" name="number" class="entry">
+                </div>
+                <div>
+                    <span class="left-text">&nbsp;&nbsp;&nbsp;&nbsp;密码</span>
+                    <input type="password" name="password" placeholder="请输入6-20位号码字符" class="entry">
+                </div>
+             {% block lowarea %}
+                    
+                <div id="row3" style="margin-bottom: 6px; line-height: 43px; height: 43px">
+                    <input type="checkbox" name="remember" id="checkbox" checked="true"> 
+                    <span>记住密码</span>
+                    <div class="super-link">
+                        <a href="#">忘记密码?</a>
+                        <a href="#">快捷登录</a>
+                    </div>
+                </div>
+                {% endblock lowarea %}   
+                <div>
+                    <div id="bl">
+                        <a href="#">登录</a>
+                    </div>
+                    <div id="br">
+                        <a href="{% url 'register' %}">注册会员</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

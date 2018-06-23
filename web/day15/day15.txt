@@ -1,0 +1,141 @@
+1.jQuery 动画
+	1.基本显示/隐藏
+		语法:
+			$obj.show()/$obj.show(执行时间)
+			$obj.hide()/$obj.hide(执行时间)
+	2.滑动式的显示和隐藏
+		语法
+			$obj.slideDown()/$obj.slideDown(执行时间)
+			$obj.slideUp()/$obj.slideUp(执行时间)
+	2.淡入淡出的显示和隐藏
+		语法
+			$obj.fadeIn()/$obj.fadeIn(执行时间)
+			$obj.fadeOut()/$obj.fadeOut(执行时间)
+
+=========================================================================
+Django框架
+1.WEB与服务器
+	1.WEB:表示用户可以浏览的网页内容(HTML,CSS,JS)
+	2.服务器
+		能够给用户提供服务器的机器
+		1.硬件与软件
+			硬件范畴:一台机器
+			软件范畴:一个能够接收用户请求并给出响应的程序
+				1.APACHE
+				2.TOMCAT
+				3.ISS
+				4.NGINX
+				...
+		2.作用:
+			1.存储Web所需要的信息(HTML,图片,文件..)
+			2能够处理用户的请求(request)并给响应(response)
+			3.执行服务器程序:数据库操作
+		3.Web与服务器之间的关系
+		4.DJango框架
+			使用python语言来开发服务器端处理程序
+2.框架
+	1.什么是框架
+		框架是一个为了解决开放性问题而存在的一种结构.框架本身提供了一些最基本的功能,我们只需要在框架的基础上搭建属于自己的操作即可
+	2.Python中的框架
+		1.Django:重量级的WEB框架
+		2.Tornado:异步框架
+		3.Flask:轻量级的WEB框架
+3.Django框架
+	1.什么是Django
+		是一个开源框架,2005年发布,采用Python语言开发.早期是做新闻以及内容管理的网站的.提供了非常强大的后台管理系统.
+	2.Django-MTV
+		M:Models 层 
+			模型层,负责数据库的建模,以及CRUD的操作
+		T:Templates层
+			模板层,用于处理用户显示的内容,如HTML
+		V:View层
+			视图层:处理与用户交互的部分操作,从模型中获取数据发送给模板,并显示给用户
+
+	自己了解:MVC
+		M:Models层
+		V:View层
+			用于处理用户显示内容
+		C:Controllers控制层
+			处理与用户交互的部分内容,从模型中获取数据,再交给视图层,再显示给用户
+4.Django的使用
+	1.Django介绍
+		网站:www.djangoproject.com
+		中文版:djangobook.py3k.cn/2.0/
+	2.Django安装
+		1.查看已安装的Django版本
+			1.进入到终端:python3交互模式
+			2.在交互模式中,输入import django
+				未报错,说明已经安装
+			3.查看已安装的Django版本
+				交互模式中:django.VERSION
+		2.安装
+			1.在线安装
+				sudo pip3 install django==1.11.8指定版本安装 
+			2.离线安装
+				1.下载所需的Django安装包
+				2.在环境中解压Django包
+					tar -xvf Django-1.11.tar.gz
+				3.进入到Django-1.11.8中
+				4.安装
+					sudo python3 setup.py install
+		3.使用Django
+			1.创建Django项目
+				使用 django-admin指令,创建Django项目
+					django-admin startproject 项目名称
+
+			2.启动服务,用于访问
+				使用manage.py文件启动服务
+				python3 manage.py runserver
+
+			3.启动服务成功后,在浏览器中,通过以下地址访问
+				http://127.0.0.1:8000/
+5.Django的项目的结构介绍
+	manager.py
+		1.启动服务
+		2.创建管理员
+		3.创建应用
+		4.数据仓库的同步操作
+
+	调用方式
+		1.python3 manage.py runserver
+		2../manage.py 子命令
+		*创建完项目后,修改manage运行环境为python3
+
+	2.主目录(名称与项目名称相同)	
+		1.__init__.py
+			项目初始化文件,每当服务器启动的时候都会自动执行
+		2.urls.py
+			项目的基础url(路由)配置文件
+		3.wsgi.py
+			应用服务器的配置文件
+		4.settings.py
+			项目的主设置文件
+			1.BASE_DIR
+				获取当前项目的根路径
+			2.DEBUG:调试模式
+				开发过程:推荐使用True
+			3.ALLOWED_HOSTS
+				设置允许访问本项目的地址列表
+				不设置:只有本机能访问
+				"*":表示任何地址都可以访问到该项目(局域网)
+				python3 manage.py runserver 0.0.0.0:8000
+			4.INSTALLED_APPS
+				指定已安装的应用,如果有自定义的应用的话,需要在此位置设置
+			5.MIDDLEWARE
+				指定注册的中间件
+			6.ROOT_URLCONF
+				指定项目的基础路由配置文件
+			7.TEMPLATES
+				指定模板的信息
+			8.DATABASES
+				指定数据库
+			9.LANGUAGE_CODE
+				指定网站的显示语言,如果需要使用中文则可以修改为zh-Hans
+			10.TIME_ZONE
+				指定时区,如果指定中国时区,则可以修改为
+				Asia/Shanghai
+	3.URL的使用
+		1.url.py
+			默认在主目录中,主路由配置文件,会包含最基本的地址映射
+			每个请求到达之后,都会有urls.py'中的urlpatterns列表中的url()进行匹配
+			url()函数匹配上之后,可能将请求转交给其他的urls.py或视图(views)去处理

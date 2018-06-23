@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    body {
+        font-family: '微软雅黑'
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 1000px;
+        font-size: 20px;
+    }
+
+    table,
+    td {
+        border: 1px solid black;
+    }
+
+    thead>tr>td {
+        background-color: darkred;
+        color: white;
+        border: 1px solid #999999;
+    }
+
+    td {
+        padding-left: 5px;
+    }
+
+    .row1 {
+        width: 30%;
+    }
+
+    .row2 {
+        width: 20%;
+    }
+
+    .row3 {
+        width: 20%;
+    }
+
+    .row4 {
+        width: 30%;
+    }
+
+    .row4 button {
+        margin: 10px;
+        border: none;
+        background-color: white;
+        text-decoration: underline;
+        font-size: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <script src='../jquery-1.11.3.js'></script>
+    <script>
+    function addItem() {
+        var button_json = {
+            "height": "100%",
+            "box-sizing": "border-box",
+            "border": "none",
+            "background": "none",
+            "font-size": "20px",
+            "font-family": "微软雅黑",
+            "color": "darkred",
+            "text-decoration": "underline"
+        };
+        //获取三个文本框的值,创建两个按钮
+        $elements = $('#inputArea').children();
+        var name = $elements[0].value;
+        var price = $elements[1].value;
+        var quantity = $elements[2].value;
+        var $mbutton = $('<button>修改</button>')
+        $mbutton.css(button_json)
+        var $dbutton = $('<button>删除</button>')
+        $dbutton.css(button_json)
+        $dbutton.click(delItem)
+        $mbutton.click(modifyItem)
+        //2.创建四个td,使用上方的值赋值
+        var $tdName = $('<td>' + name + '</td>');
+        var $tdPrice = $('<td>' + price + '</td>');
+        var $tdQuantity = $('<td>' + quantity + '</td>');
+        var $tdOper = $('<td></td>');
+        $tdOper.append($mbutton);
+        $tdOper.append($dbutton);
+        //3.创建一个tr,追加四个td
+        var $tr = $('<tr></tr>');
+        $tr.append($tdName);
+        $tr.append($tdPrice);
+        $tr.append($tdQuantity);
+        $tr.append($tdOper);
+        //4.将tr追加到tbody中
+        $('#outputArea').append($tr);
+
+    }
+
+    function delItem() {
+        $(this).parent().parent().remove();
+    }
+
+    function modifyItem() {
+        if ($(this).text() == '修改') {
+            var $row3 = $(this).parent().prev();
+            var button_json = {
+                "width": "31px",
+                "height": "100%",
+                "box-sizing": "border-box",
+                "border": "none",
+                "background": "none",
+                "color": "darkred"
+            };
+            var entry_json = {
+                "width": "119px",
+                "box-sizing": "border-box",
+                "height": "100%",
+                "font-size": "20px",
+                "padding": "0px",
+                "border": "none",
+                "font-family": "微软雅黑",
+                "vertical-align": "center",
+                "color": "black"
+            }
+            var $minus = $('<button>▼</button>');
+            $minus.css(button_json);
+            var $value = $('<input type="text" value=' + $row3.text() + '>');
+            $value.css(entry_json);
+            var $plus = $('<button>▲</button>');
+            $plus.css(button_json);
+            $plus.click(do_plus);
+            $minus.click(do_minus);
+            $row3.html('');
+            $row3.append($value);
+            $row3.append($minus);
+            $row3.append($plus);
+            $(this).html('确定');
+        } else {
+            $(this).html('修改');
+            var $row3 = $(this).parent().prev();
+            var quantity = $row3.children('input').val();
+            $row3.html('' + quantity);
+        }
+    }
+
+    function do_plus() {
+        value = $(this).prev().prev().val();
+        value++;
+        $(this).prev().prev().val(value);
+    }
+
+    function do_minus() {
+        value = $(this).prev().val();
+        if (value > 0) {
+            value--;
+        }
+        $(this).prev().val(value);
+    }
+    </script>
+    <div id='inputArea'>
+        <input type="text" placeholder="商品名称">
+        <input type="text" placeholder="商品价格">
+        <input type="text" placeholder="购买数量">
+        <button onclick="addItem()">增加</button>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td class="row1">商品名称</td>
+                    <td class="row2">商品价格</td>
+                    <td class="row3">购买数量</td>
+                    <td class="row4">操作</td>
+                </tr>
+            </thead>
+            <tbody id='outputArea'>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
