@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src='/static/js/jquery-1.11.3.js'></script>
+	<script src='{% static "js/login.js" %}'></script>
+</head>
+<body>
+	<h3>
+		<a href="/04_query/?id=52&name=zsf">手动拼参数</a>
+	</h3>
+	<form action="/03_get/" method="get" id="frmLogin">
+{# 		<input type='hidden' name='csrfmiddlewaretoken' value='28bu6ebCwj78SDEQPRm1HrGtEXYZSQZZMdMgBbBWYspC71qaSZTKhfMrNDR64G9J' /> #}
+		<ul>
+			<li>用户名: <input type="text" name='uname'></li>
+			<li>密码: <input type="password" name='upasswd'></li>
+			<li><input type="submit" value="登录"></li>
+		</ul>
+	</form>
+</body>
+</html>

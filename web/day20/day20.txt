@@ -1,0 +1,77 @@
+1.关系映射
+	1.一对一(1:1)
+		entry = models.OneToOneField(Entry)
+	2.一对多(1:M)
+		1.什么样的情况是一对多
+			A表中的一条数据可以与B表中的多条数据关联
+			B表中的一条数据只能与A表中的一条数据关联
+		2.在数据库中的体现
+			通过外键(Foreign Key)来体现一对多
+			在"多"表中增加外键,对"一"的表的主键进行引用
+		3.语法
+			使用外键(Foreign Key)
+			在多的实体中增加:
+				属性 = models.ForeignKey(Entry)
+		4.查询
+			Book(多)和Publisher(一)
+
+			1.正向查询-通过book查询publisher
+				#查询id为1的书籍的信息
+				book = Book.objects.get(id=1)
+				#查询关联的publisher
+				pulisher = book.pulisher
+			2.反向查询-通过publisher查询book
+				Django会在1的实体中增加关联对象_set属性用于查询多的数据
+				publisher = Publisher.objects.get(id=1)
+				books = publisher.book_set.all()
+	3.多对多(M:N)
+		1.什么是多对多
+			A表中的一条记录可以与B表中的任意多条记录匹配
+			B表中的一条记录可以与A表中的任意多条记录匹配
+			ex:
+				作者与书籍
+		2.在数据中的体现
+			必须创建第三张表,关联涉及到两张表的数据
+		3.语法	
+			允许在任何一个实体中增加操作
+				entry= models.ManytoManyField(Entry)
+			ex.
+				作者中:
+				book = models.ManytoManyField(Book)
+		4.查询
+			1.正向查询:
+				通过Author查询所有的Book
+				author = Author.objects.get(id=1)
+				author.book.all()
+				通过关联属性.all()查询所有对应的数据
+			2.反向查询-通过Book查询所有的Author
+				Django中会在Book实体中增加一个隐式属性author_set
+				book = Book.object.get(id=1)
+				authors = book.author_set.all()
+		练习:
+			创建Author与Publisher的多对多关系,并插入关联数据
+			1.查询韩寒签约的所有出版社
+			2.查询北京大学出版社下的所有作者
+
+2.自定义查询对象
+	1.声明类EntryManager,继承自models.Manager
+		在EntryManger中添加自定义函数
+
+		class EntryManager(models.Manager):
+			def 函数名(self,自定义参数列表):
+				...
+				return... ...
+	2.使用EntryManager覆盖models类中的objects
+		class Entry(models.Model):
+			objects = EntryManager()
+
+3.HttpRequest介绍
+	主要内容
+		1.request.scheme:请求协议
+		2.request.body:请求主体
+		3.request.path:请求路径
+		4.request.get_host():请求主机/域名
+		5.request.method:请求方法
+		6.request.GET:get请求方式提交的数据
+		7.request.POST:post请求方式提交的数据
+		8.request.COOKIES:cookies中的数据

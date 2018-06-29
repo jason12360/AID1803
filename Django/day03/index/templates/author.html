@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>作者列表</title>
+	<style>
+		body{
+			font-family: '微软雅黑';
+			
+		}
+		table td{
+			width:200px;
+			padding-left:10px;
+		}
+		table tbody{
+			background: #EEE;
+		}
+		table thead{
+			background-color: #333;
+			color:white;
+		}
+		body>a{
+			margin:50px;
+		}
+		table tr td:nth-child(1){
+			width:50px;
+		}
+	</style>
+</head>
+<body>
+	<script src="/static/js/jquery-1.11.3.js"></script>
+	<script>
+	
+			function delete_author(){
+				var id = $(this);
+				// .parent().parent().children()[0].innerHTML();
+				console.log(id);
+
+			};
+
+	</script>
+
+		
+	
+	<table>
+		<thead>
+			<tr>
+				<td>ID</td>
+				<td>作者名</td>
+				<td>年龄</td>
+				<td>email</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		{% block content %}
+		<tbody>
+			{% for au in auList  %}
+			<tr>
+				<td>{{au.id}}</td>
+				<td>{{au.name}}</td>
+				<td>{{au.age}}</td>
+				<td>{{au.email}}</td>
+				<td>
+					<a href="{% url 'del' au.id %}">删除</a>
+					<a href="{% url 'mod' au.id %}">修改</a>
+				</td>
+			</tr>
+				
+			{% endfor %}
+		</tbody>
+		{% endblock content %}
+	</table>
+	<a href="/02_query/order_by_age_asc">按年龄从小到大排列</a>
+	<a href="/02_query/order_by_age_desc">按年龄从大到小排列</a>
+	<a href="/01_add">复原</a>
+	<a href="/07_upage">都加十岁!</a>
+	<a href="/08_doQ">筛选</a>
+
+</body>
+</html>

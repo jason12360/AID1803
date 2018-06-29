@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/dailyfruit2.0.css">
+   <script src="/static/js/jquery-1.11.3.js"></script>
+   {% block js %}
+       
+    <script src="/static/js/login.js"></script>
+   {% endblock js %}
     {% block logo_title %}
     <title>天天果园登录界面</title>
         
@@ -29,17 +34,21 @@
         {% block formhead %}
         <div id='right-login'>
                 
-            <form action="login" method="POST">
-            {% endblock formhead %}
+            <form action="" method="POST" id="Lform">
+                {% csrf_token %}
+        
 
+
+        {% endblock formhead %}
+                    <p class="err">{{errMsg}}</p>
+                {% for field in form %}
                 <div>
-                    <span class="left-text">手机号</span>
-                    <input type="text" name="number" class="entry">
-                </div>
-                <div>
-                    <span class="left-text">&nbsp;&nbsp;&nbsp;&nbsp;密码</span>
-                    <input type="password" name="password" placeholder="请输入6-20位号码字符" class="entry">
-                </div>
+                    <span class="left-text">{{field.label}}</span>
+                    {{field}}
+                </div> 
+                    
+                {% endfor %}
+
              {% block lowarea %}
                     
                 <div id="row3" style="margin-bottom: 6px; line-height: 43px; height: 43px">

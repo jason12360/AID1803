@@ -1,18 +1,11 @@
 {% extends "login.html" %} 
 
+{% block js %}
+    
+<script src="/static/js/register.js"></script>
+{% endblock js %}
 {% block logo_title %}
 <title>天天果园-会员注册</title>
-<script src="/static/js/jquery-1.11.3.js"></script>
-<script>
-$(function() {
-    var bl = $('#bl>a');
-    bl.text('注册');
-    var br = $('#br>a');
-    br.text('会员登录');
-    br.attr('href', "{% url 'login' %}");
-
-});
-</script>
 <style>
 #right-login {
     margin-top: 0px;
@@ -28,21 +21,22 @@ $(function() {
 
  {% block formhead %}
 <div id='right-login'>
-    <form action="register" method="POST">
+    <form action="" method="POST" id="Rform">
+        {% csrf_token %}
 {% endblock formhead %} 
 
 {% block lowarea %}
 <div>
     <span class="left-text">确认密码</span>
-    <input type="password" name="password" placeholder="请输入6-20位号码字符" class="entry">
+    <input type="password" name="cpassword" placeholder="请输入6-20位号码字符" class="entry">
 </div>
 <div>
     <span class="left-text">用户名</span>
-    <input type="text" name="number" class="entry">
+    <input type="text" name="uname" class="entry">
 </div>
 <div>
     <span class="left-text">邮箱</span>
-    <input type="email" name="number" class="entry">
+    <input type="email" name="uemail" class="entry">
 </div>
 {%endblock lowarea %}
 

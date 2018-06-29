@@ -1,0 +1,98 @@
+1.使用forms模块处理表单
+	1.内置小部件
+		1.小部件
+			小部件,表示生成到页面中的控件的类型以及其他属性
+		2.常用小部件
+			1.TextInput : type = 'text'
+			2.NumberInput : type = 'number'
+			3.EmailInput : type = 'text'
+			4.URLInput : type = 'url'
+			5.PasswordInput: type = 'password'
+			6.HiddenInput: type = 'hidden'
+			7.CheckboxInput:type = 'checkbox'
+			8.Textarea: <text></text>
+			9.Select: <select></select>
+		3.小部件的使用 
+			1.继承自forms.Form
+				1.基本版
+					属性 = forms.CharField(
+						label='xxx'
+						widgets=forms.小部件类型
+					)
+				2.高级版
+					属性 = forms.CharField(
+						label='标签'
+						widget = forms.小部件类型(attrs={}
+						)
+					)
+			2.继承自forms.ModelForm
+				class Meta:
+					model = Users
+					fields = '__all__'
+					label = {
+					'属性1':'标签1'
+				}
+					widgets = {
+					'属性1':forms.小部件类型(attr={})
+				}
+2.cookies
+	1.什么是cookies
+		cookies是一种数据存储技术
+		将文本保存在客户端(浏览器)的一种技术,并可以长时间保存
+	2.cookies的应用场合
+		1.保存登录信息
+		2.保存搜索关键词
+	3.django中使用cookies
+		1.设置cookies的值(将数据保存进客户端)
+			语法:
+				响应对象.setcookie(key,value,expires)
+				key:cookie的名字
+				value:cookie的值
+				expires:cookie的保存时间,以s为单位60*60*24*365
+			1.不使用模板
+				resp = HttpResponse('')
+				resp.set_cookie('name','zsf',60*60)
+				return resp
+			2.使用模板
+				resp = render(request,'xxx.html',locals())
+				resp.set_cookie('name','zsf',60*60)
+				return resp
+			3.使用重定向
+				resp = HttpResponseRedirect('/xxx/')
+				resp.set_cookie(key,value,expires)
+				return resp
+			练习:
+				1.完成登录操作
+				2.判断手机号和密码是否正确
+				3.如果正确的话,并且勾选了记住密码的话,则将登录信息保存进cookie,保存ID和用户名.存期为一年
+		2.获取cookies的值(从客户端中取数据)
+			request.COOKIES
+			封装了当前站点下的所有cookie信息
+
+			练习
+				1.完善fruitday登录
+				2.当用户访问登录路径时,判断cookies中是否有登录信息(id,uphone),如果有登录信息则提示 欢迎回来
+					没有 显示登录页
+3.sessions - 会话
+	1.什么是session,实际上是在服务器上为浏览器开辟一段空间,用于保存相关的信息
+	2.在Django中使用session
+		1.设置session的值
+			request.session['key'] = 值
+			
+			设置session的过期时间
+			request.session.set_expiry(time)
+			time 就是以秒为单位的时间
+		2.获取session的值
+			request.session(key)或 request.session.get(key)
+		3.删除session的值
+			del request.session['key']
+
+	3.在settings.py中,有关session的设置
+		1.SESSION_COOKIE_AGE
+			作用:设置sessionID在cookies中的存活时间
+			ex:
+				SESSION_COOKIE_AGE=60*10
+				sessionID在cookie中保留10分钟
+		2.SESSION_EXPIRE_AT_BROWSER_CLOSE
+			作用:设置在浏览器关闭时同时清除在服务器上对应的session空间
+			 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
